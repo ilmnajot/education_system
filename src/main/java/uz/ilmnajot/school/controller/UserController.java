@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import uz.ilmnajot.school.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "Bearer")
 public class UserController {
 
     private final UserService userService;

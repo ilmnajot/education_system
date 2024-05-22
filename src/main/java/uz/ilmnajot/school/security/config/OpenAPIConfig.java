@@ -10,8 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 @OpenAPIDefinition(
         info = @Info(contact = @Contact(
@@ -43,41 +41,6 @@ import java.util.List;
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER
 )
-//@OpenAPIDefinition
-//@Configuration
 public class OpenAPIConfig {
-
-////    @Value("${openapi.samps-url}")
-//    private String url;
-//
-//    @Bean
-//    public OpenAPI openAPI() {
-//        Server server = new Server();
-//        server.setUrl("www.ilmnajot.uz");
-//        server.setDescription("Open API documentation - SAMPS");
-//
-//        Contact contact = new Contact()
-//
-//                .email("samps@gmail.com")
-//                .name("SamPS library")
-//                .url("https://samps.uz");
-//
-//
-//        License license = new License()
-//                .name("MIT License")
-//                .url("https://opensource.org/licenses/MIT");
-//
-//        Info info = new Info()
-//                .title("Open API documentation - SAMPS library")
-//                .version("1.1")
-//                .contact(contact)
-//                .description("Open API documentation - SAMPS library")
-//                .termsOfService("https://wwww.brainone.com/terms");
-////                .license(license);
-//        return new OpenAPI()
-////                .info(info)
-//                .servers(List.of(server));
-//    }
-
 
 }
