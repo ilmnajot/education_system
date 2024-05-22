@@ -1,6 +1,7 @@
 package uz.ilmnajot.school.service;
 
 import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
@@ -64,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoleName(RoleName.ADMIN);
+        user.setGender(request.getGender());
         user.setEnabled(true);
         User savedUser = userRepository.save(user);
         String token = jwtProvider.generateToken(user);

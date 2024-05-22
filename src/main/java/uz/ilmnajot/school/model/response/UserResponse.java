@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.model.response;
 
+import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class UserResponse {
     private String phoneNumber;
 
     private RoleName roleName;
+
+    private Gender gender;
 //
 //    private String password;
 //

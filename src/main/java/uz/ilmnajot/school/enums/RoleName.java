@@ -2,5 +2,5 @@ package uz.ilmnajot.school.enums;
 
 public enum RoleName {
     ADMIN,
-    DEVELOPER
+    USER
 }

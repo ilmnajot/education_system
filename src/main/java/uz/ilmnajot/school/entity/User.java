@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.ilmnajot.school.base.BaseEntity;
+import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
 
 import java.util.Collection;
@@ -34,6 +35,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     private boolean accountNonExpired = true;
 
