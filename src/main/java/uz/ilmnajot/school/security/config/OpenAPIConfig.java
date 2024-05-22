@@ -19,7 +19,7 @@ import java.util.List;
                 url = "https://sampm.uz",
                 email = "ilmnajot2021@gmail.com"
         ),
-                title = "Samarkand Presidential School - Elbek Umar",
+                title = "Education_System",
                 version = "1.0",
                 license = @License(
                         name = "MIT License",
@@ -29,7 +29,7 @@ import java.util.List;
         ),
         servers = {
                 @Server(
-                        description = "ilmNajot online platform",
+                        description = "online platform",
                         url = "https://localhost:8080"
                 )
         }

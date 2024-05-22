@@ -21,7 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/singUp")
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
         ApiResponse register = authService.register(form);
         return register != null
@@ -29,7 +29,8 @@ public class AuthController {
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @PostMapping("/login")
+    
+    @PostMapping("/signIn")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginForm form) {
         ApiResponse authenticate = authService.authenticate(form);
         return authenticate != null

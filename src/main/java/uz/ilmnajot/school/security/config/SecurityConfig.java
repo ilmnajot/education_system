@@ -45,19 +45,19 @@ public class SecurityConfig {
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .formLogin(login -> {
-                    login.loginPage("/api/auth/login");
-                    login.defaultSuccessUrl("/");
-                    login.failureUrl("/login-error");
-                })
-                .logout(logout -> {
-                    logout.logoutRequestMatcher(new AntPathRequestMatcher("logout"));
-                    logout.logoutSuccessUrl("/");
-                    logout.deleteCookies("JSESSIONID");
-                    logout.invalidateHttpSession(true);
-                });
+//                .formLogin(login -> {
+//                    login.loginPage("/api/auth/login");
+//                    login.defaultSuccessUrl("/");
+//                    login.failureUrl("/login-error");
+//                })
+//                .logout(logout -> {
+//                    logout.logoutRequestMatcher(new AntPathRequestMatcher("logout"));
+//                    logout.logoutSuccessUrl("/");
+//                    logout.deleteCookies("JSESSIONID");
+//                    logout.invalidateHttpSession(true);
+//                });
 
         return http.build();
     }
