@@ -1,6 +1,5 @@
-package com.example.ilmnajot.base;
+package uz.ilmnajot.school.base;
 
-import com.example.ilmnajot.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import uz.ilmnajot.school.entity.User;
 
 import java.sql.Timestamp;
 

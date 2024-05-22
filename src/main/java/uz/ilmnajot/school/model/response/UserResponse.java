@@ -1,7 +1,6 @@
-package com.example.ilmnajot.model.response;
+package uz.ilmnajot.school.model.response;
 
-import com.example.ilmnajot.enums.RoleName;
-import jakarta.persistence.Entity;
+import uz.ilmnajot.school.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,5 @@
-package com.example.ilmnajot.exception;
+package uz.ilmnajot.school.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.http.HttpStatus;

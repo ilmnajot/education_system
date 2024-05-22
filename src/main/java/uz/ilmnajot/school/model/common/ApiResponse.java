@@ -1,4 +1,4 @@
-package com.example.ilmnajot.model.common;
+package uz.ilmnajot.school.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

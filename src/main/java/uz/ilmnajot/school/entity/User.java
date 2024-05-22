@@ -1,14 +1,16 @@
-package com.example.ilmnajot.entity;
+package uz.ilmnajot.school.entity;
 
-import com.example.ilmnajot.base.BaseEntity;
-import com.example.ilmnajot.enums.RoleName;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.ilmnajot.school.base.BaseEntity;
+import uz.ilmnajot.school.enums.RoleName;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 

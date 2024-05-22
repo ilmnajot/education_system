@@ -1,14 +1,12 @@
-package com.example.ilmnajot.service;
+package uz.ilmnajot.school.service;
 
-import com.example.ilmnajot.entity.User;
-import com.example.ilmnajot.enums.RoleName;
-import com.example.ilmnajot.exception.UserException;
-import com.example.ilmnajot.model.common.ApiResponse;
-import com.example.ilmnajot.model.request.UserRequest;
-import com.example.ilmnajot.model.response.LoginResponse;
-import com.example.ilmnajot.model.response.UserResponse;
-import com.example.ilmnajot.repository.UserRepository;
-import com.example.ilmnajot.security.jwt.JwtProvider;
+import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.exception.UserException;
+import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.UserRequest;
+import uz.ilmnajot.school.model.response.UserResponse;
+import uz.ilmnajot.school.repository.UserRepository;
+import uz.ilmnajot.school.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;

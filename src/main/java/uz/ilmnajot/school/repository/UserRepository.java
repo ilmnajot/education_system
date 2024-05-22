@@ -1,6 +1,6 @@
-package com.example.ilmnajot.repository;
+package uz.ilmnajot.school.repository;
 
-import com.example.ilmnajot.entity.User;
+import uz.ilmnajot.school.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

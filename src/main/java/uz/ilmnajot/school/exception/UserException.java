@@ -1,4 +1,4 @@
-package com.example.ilmnajot.exception;
+package uz.ilmnajot.school.exception;
 
 import org.springframework.http.HttpStatus;
 

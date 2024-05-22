@@ -1,6 +1,5 @@
-package com.example.ilmnajot.model.request;
+package uz.ilmnajot.school.model.request;
 
-import com.example.ilmnajot.enums.RoleName;
 import lombok.Data;
 
 @Data

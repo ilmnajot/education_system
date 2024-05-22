@@ -1,4 +1,4 @@
-package com.example.ilmnajot.model.request;
+package uz.ilmnajot.school.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

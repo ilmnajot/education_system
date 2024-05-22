@@ -1,4 +1,4 @@
-package com.example.ilmnajot.model.response;
+package uz.ilmnajot.school.model.response;
 
 import lombok.Data;
 

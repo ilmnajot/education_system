@@ -1,4 +1,4 @@
-package com.example.ilmnajot.security.config;
+package uz.ilmnajot.school.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

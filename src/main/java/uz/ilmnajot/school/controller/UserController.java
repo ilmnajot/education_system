@@ -1,13 +1,12 @@
-package com.example.ilmnajot.controller;
+package uz.ilmnajot.school.controller;
 
-import com.example.ilmnajot.model.common.ApiResponse;
-import com.example.ilmnajot.model.request.UserRequest;
-import com.example.ilmnajot.model.response.LoginResponse;
-import com.example.ilmnajot.service.UserService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.UserRequest;
+import uz.ilmnajot.school.service.UserService;
 
 @RestController
 @RequestMapping("/users")

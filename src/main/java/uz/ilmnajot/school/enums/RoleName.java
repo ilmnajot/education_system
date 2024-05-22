@@ -1,4 +1,4 @@
-package com.example.ilmnajot.enums;
+package uz.ilmnajot.school.enums;
 
 public enum RoleName {
     ADMIN,

@@ -1,7 +1,7 @@
-package com.example.ilmnajot.service;
+package uz.ilmnajot.school.service;
 
-import com.example.ilmnajot.exception.UserException;
-import com.example.ilmnajot.repository.UserRepository;
+import uz.ilmnajot.school.exception.UserException;
+import uz.ilmnajot.school.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;

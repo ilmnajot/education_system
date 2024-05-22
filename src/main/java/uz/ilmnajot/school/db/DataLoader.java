@@ -1,12 +1,11 @@
-package com.example.ilmnajot.db;
-
-import com.example.ilmnajot.entity.User;
-import com.example.ilmnajot.repository.UserRepository;
+package uz.ilmnajot.school.db;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor

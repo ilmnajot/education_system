@@ -1,8 +1,7 @@
-package com.example.ilmnajot.service;
+package uz.ilmnajot.school.service;
 
-import com.example.ilmnajot.model.common.ApiResponse;
-import com.example.ilmnajot.model.request.UserRequest;
-import com.example.ilmnajot.model.response.LoginResponse;
+import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.UserRequest;
 
 public interface UserService {
 
