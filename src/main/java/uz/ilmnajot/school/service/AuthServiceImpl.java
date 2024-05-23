@@ -72,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+        System.out.println("token: " + token);
         return new ApiResponse("The User with username: " + request.getUsername() + " and user details are : " + userResponse + " has been registered successfully", true, loginResponse);
     }
 

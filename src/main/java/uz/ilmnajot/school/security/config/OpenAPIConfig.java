@@ -8,44 +8,41 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.models.OpenAPI;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
-@Configuration
-@OpenAPIDefinition(
-        info = @Info(contact = @Contact(
-                name = "ilmnajot.uz",
-                url = "https://sampm.uz",
-                email = "ilmnajot2021@gmail.com"
-        ),
-                title = "Education_System",
-                version = "1.0",
-                license = @License(
-                        name = "MIT License",
-                        url = "https://apache.org/mit/mitLicense"
-                ),
-                termsOfService = "Terms of Service"
-        ),
-        servers = {
-                @Server(
-                        description = "online platform",
-                        url = "https://localhost:8080"
-                )
-        }
-
-)
-@SecurityScheme(
-        name = "Bearer",
-        description = "Bearer token description here",
-        scheme = "bearer",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        in = SecuritySchemeIn.HEADER
-)
-//@Configuration
-//@OpenAPIDefinition
+//
+////@Configuration
+//@OpenAPIDefinition(
+//        info = @Info(contact = @Contact(
+//                name = "ilmnajot.uz",
+//                url = "https://sampm.uz",
+//                email = "ilmnajot2021@gmail.com"
+//        ),
+//                title = "Education_System",
+//                version = "1.0",
+//                license = @License(
+//                        name = "MIT License",
+//                        url = "https://apache.org/mit/mitLicense"
+//                ),
+//                termsOfService = "Terms of Service"
+//        ),
+//        servers = {
+//                @Server(
+//                        description = "online platform",
+//                        url = "https://localhost:8080"
+//                )
+//        }
+//)
+//@SecurityScheme(
+//        name = "Bearer",
+//        description = "Bearer token description here",
+//        scheme = "bearer",
+//        type = SecuritySchemeType.HTTP,
+//        bearerFormat = "JWT",
+//        in = SecuritySchemeIn.HEADER
+//)
+////@Configuration
+////@OpenAPIDefinition
 public class OpenAPIConfig {
 
 //    @Bean
