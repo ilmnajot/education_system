@@ -93,10 +93,15 @@ public class UserServiceImpl implements UserService {
     public ApiResponse updateUser(Long userId, UserRequest request) {
         User user = getUser(userId);
         user.setId(userId);
-        user.setFullName(request.getFullName());
-        user.setUsername(request.getUsername());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setPassword(request.getPassword());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPosition(request.getPosition());
+        user.setSchoolName(request.getSchoolName());
+        user.setGender(request.getGender());
+//        user.setPassword(request.getPassword());
 //        user.setRoleName(request.getRoleName());
         User savedUser = userRepository.save(user);
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
@@ -105,12 +110,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse deleteUser(Long userId) {
-        User user = getUser(userId);
-        if (user != null) {
-            userRepository.deleteById(userId);
-            return new ApiResponse("user deleted", true, "User deleted successfully");
-        }
-        throw new UserException("User not found", HttpStatus.NOT_FOUND);
+        getUser(userId);
+        userRepository.deleteById(userId);
+        return new ApiResponse("user deleted", true, "User deleted successfully");
     }
 
     @Override
@@ -126,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse getUserByEmail(String email) {
-        Optional<User> userByEmail = userRepository.findByUsername(email);
+        Optional<User> userByEmail = userRepository.findByEmail(email);
         if (userByEmail.isPresent()) {
             User user = userByEmail.get();
             UserResponse userResponse = modelMapper.map(user, UserResponse.class);

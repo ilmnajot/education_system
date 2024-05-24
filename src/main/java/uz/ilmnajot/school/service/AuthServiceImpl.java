@@ -3,6 +3,7 @@ package uz.ilmnajot.school.service;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
+import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.LoginForm;
@@ -44,15 +45,9 @@ public class AuthServiceImpl implements AuthService {
         this.modelMapper = modelMapper;
     }
 
-    /**
-     *
-     * @param request
-     * @return user details and generated token
-     */
-
     @Override
     public ApiResponse register(UserRequest request) {
-        Optional<User> userByEmail = userRepository.findByUsername(request.getUsername());
+        Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
         if (userByEmail.isPresent()) {
             throw new UserException("User is already exist", HttpStatus.CONFLICT);
         }
@@ -60,12 +55,15 @@ public class AuthServiceImpl implements AuthService {
             throw new UserException("Password does not match, please try again", HttpStatus.CONFLICT);
         }
         User user = new User();
-        user.setFullName(request.getFullName());
-        user.setUsername(request.getUsername());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoleName(RoleName.ADMIN);
+        user.setPosition(request.getPosition());
+        user.setSchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
+        user.setRoleName(RoleName.USER);
         user.setGender(request.getGender());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEnabled(true);
         User savedUser = userRepository.save(user);
         String token = jwtProvider.generateToken(user);
@@ -73,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
         loginResponse.setToken(token);
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
         System.out.println("token: " + token);
-        return new ApiResponse("The User with username: " + request.getUsername() + " and user details are : " + userResponse + " has been registered successfully", true, loginResponse);
+        return new ApiResponse("The User with username: " + request.getEmail() + " and user details are : " + userResponse + " has been registered successfully", true, loginResponse);
     }
 
     private boolean checkPassword(UserRequest request) {
@@ -86,13 +84,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ApiResponse authenticate(LoginForm form) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                form.getUsername(),
+                form.getEmail(),
                 form.getPassword()
         ));
-        var user = userRepository.findByUsername(form.getUsername()).orElseThrow();
+        var user = userRepository.findByEmail(form.getEmail()).orElseThrow();
         String token = jwtProvider.generateToken(user);
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
-        return new ApiResponse("the user with username " + form.getUsername() + " has been authenticated and Token has been generated successfully", true, loginResponse);
+        return new ApiResponse("the user with username " + form.getEmail() + " has been authenticated and Token has been generated successfully", true, loginResponse);
     }
 }

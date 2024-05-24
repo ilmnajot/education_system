@@ -5,6 +5,7 @@ import uz.ilmnajot.school.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.ilmnajot.school.enums.SchoolName;
 
 @Data
 @AllArgsConstructor
@@ -13,16 +14,24 @@ public class UserResponse {
 
     private Long id;
 
-    private String fullName;
+    private String firstName;
 
-    private String username;
+    private String lastName;
+
+    private  String email;
 
     private String phoneNumber;
+
+    private String position;
+
+    private SchoolName schoolName;
 
     private RoleName roleName;
 
     private Gender gender;
-//
+
+    //
+
 //    private String password;
 //
 //    private String rePassword;

@@ -5,6 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.enums.Gender;
+import uz.ilmnajot.school.enums.RoleName;
+import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.repository.UserRepository;
 
 @Component
@@ -23,9 +26,14 @@ public class DataLoader implements CommandLineRunner {
             userRepository.save(
                     User
                             .builder()
-                            .fullName("Elbekjon")
-                            .username("ilmnajot2021@gmail.com")
+                            .firstName("Elbekjon")
+                            .lastName("Umarov")
+                            .email("ilmnajot2021@gmail.com")
                             .phoneNumber("+998994107354")
+                            .position("Teacher")
+                            .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
+                            .roleName(RoleName.USER)
+                            .gender(Gender.MALE)
                             .password(passwordEncoder.encode("password"))
                             .build());
 
