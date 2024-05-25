@@ -19,5 +19,7 @@ public interface UserService {
 
     ApiResponse getUserByEmail(String email);
 
+    ApiResponse addUser(UserRequest request);
+
 //    LoginResponse addUser(UserRequest request);
 }

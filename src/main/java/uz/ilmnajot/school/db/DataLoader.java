@@ -22,21 +22,21 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (mode.equals("always")) {
-            userRepository.save(
-                    User
-                            .builder()
-                            .firstName("Elbekjon")
-                            .lastName("Umarov")
-                            .email("ilmnajot2021@gmail.com")
-                            .phoneNumber("+998994107354")
-                            .position("Teacher")
-                            .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
-                            .roleName(RoleName.USER)
-                            .gender(Gender.MALE)
-                            .password(passwordEncoder.encode("password"))
-                            .build());
-
-        }
+//        if (mode.equals("always")) {
+//            userRepository.save(
+//                    User
+//                            .builder()
+//                            .firstName("Elbekjon")
+//                            .lastName("Umarov")
+//                            .email("ilmnajot2021@gmail.com")
+//                            .phoneNumber("+998994107354")
+//                            .position("Teacher")
+//                            .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
+//                            .roleName(RoleName.USER)
+//                            .gender(Gender.MALE)
+//                            .password(passwordEncoder.encode("password"))
+//                            .build());
+//
+//        }
     }
 }

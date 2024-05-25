@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.service;
 
+import org.springframework.context.annotation.Lazy;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
@@ -21,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -32,6 +32,13 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     private final JwtProvider jwtProvider;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, JwtProvider jwtProvider) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
+        this.jwtProvider = jwtProvider;
+    }
 
 //
 //    @Override
@@ -135,6 +142,30 @@ public class UserServiceImpl implements UserService {
             return new ApiResponse("USER FOUND", true, userResponse);
         }
         throw new UserException("User not found", HttpStatus.NOT_FOUND);
+    }
+
+
+    @Override
+    public ApiResponse addUser(UserRequest request) {
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        if (optionalUser.isPresent()){
+            throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPosition(request.getPosition());
+        user.setSchoolName(request.getSchoolName());
+        user.setRoleName(request.getRoleName());
+        user.setGender(request.getGender());
+
+        User savedUser = userRepository.save(user);
+        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+        return new ApiResponse("success", true, userResponse);
+
     }
 
     private User getUser(Long userId) {

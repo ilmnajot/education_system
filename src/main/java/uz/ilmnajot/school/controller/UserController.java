@@ -21,13 +21,13 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @PostMapping("/addUser")
-//    public HttpEntity<?> addUser(@RequestBody UserRequest request) {
-//        LoginResponse loginResponse = userService.addUser(request);
-//        return loginResponse != null
-//                ? ResponseEntity.status(HttpStatus.ACCEPTED).body(loginResponse)
-//                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//    }
+    @PostMapping("/addUser")
+    public HttpEntity<ApiResponse> addUser(@RequestBody UserRequest request) {
+        ApiResponse apiResponse = userService.addUser(request);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
     @GetMapping("/getUser/{userId}")
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
