@@ -34,13 +34,13 @@ public class User extends BaseEntity implements UserDetails {
     @Column(unique=true)
     private String phoneNumber;
 
-    private String position;
+    private String position; //enum
 
     @Enumerated(EnumType.STRING)
     private SchoolName schoolName;
 
-    @Enumerated(EnumType.STRING)
-    private RoleName roleName;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(roleName.name()));
+        return List.of(new SimpleGrantedAuthority(roles.toString()));
     }
 
     @Override
