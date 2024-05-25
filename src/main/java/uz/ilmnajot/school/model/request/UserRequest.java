@@ -1,9 +1,12 @@
 package uz.ilmnajot.school.model.request;
 
 import lombok.Data;
+import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
 import uz.ilmnajot.school.enums.SchoolName;
+
+import java.util.List;
 
 @Data
 public class UserRequest {
@@ -20,7 +23,7 @@ public class UserRequest {
 
     private SchoolName schoolName;
 
-    private RoleName roleName;
+    private List<Role> roles;
 
     private Gender gender;
 

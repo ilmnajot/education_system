@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.service;
 
+import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
@@ -10,6 +11,7 @@ import uz.ilmnajot.school.model.request.LoginForm;
 import uz.ilmnajot.school.model.request.UserRequest;
 import uz.ilmnajot.school.model.response.LoginResponse;
 import uz.ilmnajot.school.model.response.UserResponse;
+import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.security.jwt.JwtProvider;
@@ -20,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -36,18 +39,22 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
 
-    public AuthServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, UserServiceImpl userService, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public AuthServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, UserServiceImpl userService, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleRepository roleRepository, RoleRepository roleRepository1) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.roleRepository = roleRepository1;
     }
 
     @Override
     public ApiResponse register(UserRequest request) {
+        Optional<Role> defaultRole = roleRepository.findByName("USER");
+        Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
         Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
         if (userByEmail.isPresent()) {
             throw new UserException("User is already exist", HttpStatus.CONFLICT);
@@ -65,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
             user.setPhoneNumber(request.getPhoneNumber());
             user.setPosition(request.getPosition());
             user.setSchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
-            user.setRoleName(RoleName.USER);
+            user.setRoles(Collections.singletonList(role));
             user.setGender(request.getGender());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setEnabled(true);
@@ -93,17 +100,17 @@ public class AuthServiceImpl implements AuthService {
 
         try {
             AuditingAwareConfig.enableAuditing();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                form.getEmail(),
-                form.getPassword()
-        ));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    form.getEmail(),
+                    form.getPassword()
+            ));
 
-        var user = userRepository.findByEmail(form.getEmail()).orElseThrow();
-        String token = jwtProvider.generateToken(user);
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(token);
-        return new ApiResponse("the user with username " + form.getEmail() + " has been authenticated and Token has been generated successfully", true, loginResponse);
-    } finally {
+            var user = userRepository.findByEmail(form.getEmail()).orElseThrow();
+            String token = jwtProvider.generateToken(user);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            return new ApiResponse("the user with username " + form.getEmail() + " has been authenticated and Token has been generated successfully", true, loginResponse);
+        } finally {
             AuditingAwareConfig.enableAuditing();
         }
     }

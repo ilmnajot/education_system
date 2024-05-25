@@ -33,6 +33,13 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/singUp/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/deleteUser/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "users/assignRoleToUser/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users/removeRoleToUser/").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users/updateUser/**").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.GET, "/users/getUser/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/users/getUsers/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
@@ -43,7 +50,6 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "swagger-ui.html/**")
                         .permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/users/addUser/**").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

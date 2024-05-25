@@ -21,5 +21,9 @@ public interface UserService {
 
     ApiResponse addUser(UserRequest request);
 
+    ApiResponse assignRoleToUser(Long roleId, Long userId);
+
+    ApiResponse removeRoleToUser(Long roleId, Long userId);
+
 //    LoginResponse addUser(UserRequest request);
 }

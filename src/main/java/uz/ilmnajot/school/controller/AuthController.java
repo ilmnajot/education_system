@@ -3,6 +3,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.LoginForm;
@@ -20,6 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/singUp")
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
         ApiResponse register = authService.register(form);
@@ -27,6 +29,8 @@ public class AuthController {
                 ? ResponseEntity.ok(register)
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/signIn")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginForm form) {
         ApiResponse authenticate = authService.authenticate(form);

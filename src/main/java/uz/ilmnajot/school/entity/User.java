@@ -13,11 +13,12 @@ import uz.ilmnajot.school.enums.SchoolName;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="users")
+@Table(name = "users")
 @Entity
 @Setter
 @Getter
@@ -31,7 +32,7 @@ public class User extends BaseEntity implements UserDetails {
     @Size(min = 8, max = 25, message = "please try to check your email and must be between 8 and 25")
     private String email;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String phoneNumber;
 
     private String position; //enum
@@ -39,7 +40,11 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private SchoolName schoolName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+//    @JoinTable(
+//            name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
     @Enumerated(EnumType.STRING)
@@ -58,8 +63,13 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(roles.toString()));
+        return roles
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+//        return List.of(new SimpleGrantedAuthority(roles.toString()));
     }
+
 
     @Override
     public String getPassword() {

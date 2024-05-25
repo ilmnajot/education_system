@@ -23,8 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Transactional
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addUser")
     public HttpEntity<ApiResponse> addUser(@RequestBody UserRequest request) {
         ApiResponse apiResponse = userService.addUser(request);
@@ -32,7 +31,7 @@ public class UserController {
                 ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUser/{userId}")
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.getUserById(userId);
@@ -41,6 +40,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUsers")
     public HttpEntity<ApiResponse> getUsers() {
         ApiResponse apiResponse = userService.getUsers();
@@ -49,6 +49,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/updateUser/{userId}")
     public HttpEntity<ApiResponse> updateUser(
             @PathVariable Long userId,
@@ -59,6 +60,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteUser/{userId}")
     public HttpEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.deleteUser(userId);
@@ -67,6 +69,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByName")
     public HttpEntity<ApiResponse> getUserByName(@RequestParam(name = "name") String name) {
         ApiResponse apiResponse = userService.getUserByName(name);
@@ -75,6 +78,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByEmail")
     public HttpEntity<ApiResponse> getUserByEmail(@RequestParam(name = "email") String email) {
         ApiResponse apiResponse = userService.getUserByEmail(email);
@@ -82,4 +86,30 @@ public class UserController {
                 ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/assignRoleToUser/{roleId}/{userId}")
+    public HttpEntity<ApiResponse> assignRoleToUser(
+            @PathVariable(name = "roleId") Long roleId,
+            @PathVariable(name = "userId") Long userId){
+        ApiResponse apiResponse = userService.assignRoleToUser(roleId, userId);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/removeRoleToUser/{roleId}/{userId}")
+    public HttpEntity<ApiResponse> removeRoleToUser(
+            @PathVariable(name = "roleId") Long roleId,
+            @PathVariable(name = "userId") Long userId){
+        ApiResponse apiResponse = userService.removeRoleToUser(roleId, userId);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+    }
+
+
 }
+

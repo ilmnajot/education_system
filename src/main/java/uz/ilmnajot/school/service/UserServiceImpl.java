@@ -2,12 +2,17 @@ package uz.ilmnajot.school.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
+import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.UserRequest;
+import uz.ilmnajot.school.model.response.LoginResponse;
 import uz.ilmnajot.school.model.response.UserResponse;
+import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
+import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,28 +22,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
 
-    private final JwtProvider jwtProvider;
+    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, JwtProvider jwtProvider) {
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
-        this.jwtProvider = jwtProvider;
+        this.roleRepository = roleRepository;
     }
 
 //
@@ -149,11 +153,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ApiResponse addUser(UserRequest request) {
+
+        Optional<Role> defaultRole = roleRepository.findByName("USER");
+        Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -161,13 +168,41 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
-//        user.setRoleName(request.getRoleName());
+        user.setRoles(Collections.singletonList(role));
         user.setGender(request.getGender());
-
         User savedUser = userRepository.save(user);
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
         return new ApiResponse("success", true, userResponse);
+    }
 
+    @Override
+    public ApiResponse assignRoleToUser(Long roleId, Long userId) {
+        Optional<Role> optionalRole = roleRepository.findById(roleId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalRole.isPresent() && optionalUser.isPresent()) {
+            Role role = optionalRole.get();
+            User user = optionalUser.get();
+            user.getRoles().add(role);
+            userRepository.save(user);
+            return new ApiResponse("success", true, "role has been saved successfully");
+        }
+        throw new UserException("there is no existing role or user with id" + userId + " and  " + roleId);
+    }
+
+    @Override
+    public ApiResponse removeRoleToUser(Long roleId, Long userId) {
+        Optional<Role> optionalRole = roleRepository.findById(roleId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalRole.isPresent() && optionalUser.isPresent()) {
+            Role role = optionalRole.get();
+            User user = optionalUser.get();
+            user.getRoles().remove(role);
+            userRepository.save(user);
+            return new ApiResponse("success", true, "role has been removed successfully");
+        }
+        throw new UserException("there is no existing role or user with id" + userId + " and  " + roleId);
     }
 
     private User getUser(Long userId) {
