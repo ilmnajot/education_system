@@ -2,6 +2,7 @@ package uz.ilmnajot.school.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,6 +43,7 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "swagger-ui.html/**")
                         .permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/users/addUser/**").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -49,6 +51,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+}
 
 //                .formLogin(login -> {
 //                    login.loginPage("/api/auth/login");
@@ -65,5 +69,5 @@ public class SecurityConfig {
 
 
 
-}
+
 

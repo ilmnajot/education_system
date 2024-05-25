@@ -2,9 +2,11 @@ package uz.ilmnajot.school.controller;
 
 //import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.UserRequest;
@@ -21,6 +23,8 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addUser")
     public HttpEntity<ApiResponse> addUser(@RequestBody UserRequest request) {
         ApiResponse apiResponse = userService.addUser(request);

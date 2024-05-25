@@ -14,12 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
-    private final UserDetailsServiceCustom userDetailsServiceCustom;
     private final PasswordEncoder passwordEncoder;
 
-    public ApplicationConfig(UserRepository userRepository, UserDetailsServiceCustom userDetailsServiceCustom, PasswordEncoder passwordEncoder) {
+    public ApplicationConfig(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.userDetailsServiceCustom = userDetailsServiceCustom;
         this.passwordEncoder = passwordEncoder;
     }
     @Bean

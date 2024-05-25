@@ -9,6 +9,7 @@ import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.RoleName;
 import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.repository.UserRepository;
+import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 
 @Component
 @RequiredArgsConstructor
@@ -22,21 +23,28 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        if (mode.equals("always")) {
-//            userRepository.save(
-//                    User
-//                            .builder()
-//                            .firstName("Elbekjon")
-//                            .lastName("Umarov")
-//                            .email("ilmnajot2021@gmail.com")
-//                            .phoneNumber("+998994107354")
-//                            .position("Teacher")
-//                            .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
-//                            .roleName(RoleName.USER)
-//                            .gender(Gender.MALE)
-//                            .password(passwordEncoder.encode("password"))
-//                            .build());
-//
-//        }
+      try {
+          AuditingAwareConfig.disableAuditing();
+          if (mode.equals("always")) {
+              userRepository.save(
+                      User
+                              .builder()
+                              .firstName("Elbekjon")
+                              .lastName("Umarov")
+                              .email("ilmnajot2021@gmail.com")
+                              .phoneNumber("+998994107354")
+                              .position("Teacher")
+                              .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
+                              .roleName(RoleName.USER)
+                              .gender(Gender.MALE)
+                              .password(passwordEncoder.encode("password"))
+                              .build());
+
+          }
+
+      }
+      finally {
+          AuditingAwareConfig.enableAuditing();
+      }
     }
 }

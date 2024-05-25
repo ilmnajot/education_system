@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.exception.UserException;
@@ -146,6 +147,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public ApiResponse addUser(UserRequest request) {
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
         if (optionalUser.isPresent()){
@@ -159,7 +161,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
-        user.setRoleName(request.getRoleName());
+//        user.setRoleName(request.getRoleName());
         user.setGender(request.getGender());
 
         User savedUser = userRepository.save(user);

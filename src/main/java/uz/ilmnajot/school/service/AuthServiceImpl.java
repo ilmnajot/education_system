@@ -11,6 +11,7 @@ import uz.ilmnajot.school.model.request.UserRequest;
 import uz.ilmnajot.school.model.response.LoginResponse;
 import uz.ilmnajot.school.model.response.UserResponse;
 import uz.ilmnajot.school.repository.UserRepository;
+import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.security.jwt.JwtProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -51,27 +52,33 @@ public class AuthServiceImpl implements AuthService {
         if (userByEmail.isPresent()) {
             throw new UserException("User is already exist", HttpStatus.CONFLICT);
         }
+
         if (!checkPassword(request)) {
             throw new UserException("Password does not match, please try again", HttpStatus.CONFLICT);
         }
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setPosition(request.getPosition());
-        user.setSchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
-        user.setRoleName(RoleName.USER);
-        user.setGender(request.getGender());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEnabled(true);
-        User savedUser = userRepository.save(user);
-        String token = jwtProvider.generateToken(user);
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(token);
-        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-        System.out.println("token: " + token);
-        return new ApiResponse("The User with username: " + request.getEmail() + " and user details are : " + userResponse + " has been registered successfully", true, loginResponse);
+        try {
+            AuditingAwareConfig.disableAuditing();
+            User user = new User();
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+            user.setPhoneNumber(request.getPhoneNumber());
+            user.setPosition(request.getPosition());
+            user.setSchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
+            user.setRoleName(RoleName.USER);
+            user.setGender(request.getGender());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setEnabled(true);
+            User savedUser = userRepository.save(user);
+            String token = jwtProvider.generateToken(user);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+            System.out.println("token: " + token);
+            return new ApiResponse("The User with username: " + request.getEmail() + " and user details are : " + userResponse + " has been registered successfully", true, loginResponse);
+        } finally {
+            AuditingAwareConfig.enableAuditing();
+        }
     }
 
     private boolean checkPassword(UserRequest request) {
@@ -83,14 +90,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResponse authenticate(LoginForm form) {
+
+        try {
+            AuditingAwareConfig.enableAuditing();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 form.getEmail(),
                 form.getPassword()
         ));
+
         var user = userRepository.findByEmail(form.getEmail()).orElseThrow();
         String token = jwtProvider.generateToken(user);
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
         return new ApiResponse("the user with username " + form.getEmail() + " has been authenticated and Token has been generated successfully", true, loginResponse);
+    } finally {
+            AuditingAwareConfig.enableAuditing();
+        }
     }
 }
