@@ -1,23 +1,14 @@
 package uz.ilmnajot.school.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.context.annotation.Lazy;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.UserRequest;
-import uz.ilmnajot.school.model.response.LoginResponse;
 import uz.ilmnajot.school.model.response.UserResponse;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
-import uz.ilmnajot.school.security.config.AuditingAwareConfig;
-import uz.ilmnajot.school.security.jwt.JwtProvider;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -151,16 +142,31 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
     public ApiResponse addUser(UserRequest request) {
 
-        Optional<Role> defaultRole = roleRepository.findByName("USER");
-        Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+        Role role;
 
+//        if (request.getRoleId()!=null){
+//            role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new UserException("Role not found", HttpStatus.NOT_FOUND));
+//        } else {
+
+            Optional<Role> defaultRole = roleRepository.findByName("USER");
+            role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+//        }
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
         if (optionalUser.isPresent()) {
             throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+        User user = getUser(request, role);
+        User savedUser = userRepository.save(user);
+
+        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+//        userResponse.setRole(role.getName());
+//        userResponse.setRoleId(role.getId());
+        return new ApiResponse("success", true, userResponse);
+
+    }
+    private static User getUser(UserRequest request, Role role) {
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -168,11 +174,34 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
-        user.setRoles(Collections.singletonList(role));
         user.setGender(request.getGender());
+        user.setRoles(Collections.singletonList(role));
+        return user;
+    }
+
+    @Override
+    public ApiResponse addAdmin(UserRequest request) {
+
+        Role role;
+//        if (request.getRoleId()!=null){
+//            role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new UserException("Role not found", HttpStatus.NOT_FOUND));
+//        } else {
+
+            Optional<Role> defaultRole = roleRepository.findByName("ADMIN");
+            role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+//        }
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        User user = getUser(request, role);
         User savedUser = userRepository.save(user);
+
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+//        userResponse.setRole(role.getName());
+//        userResponse.setRoleId(role.getId());
         return new ApiResponse("success", true, userResponse);
+
     }
 
     @Override
@@ -204,6 +233,7 @@ public class UserServiceImpl implements UserService {
         }
         throw new UserException("there is no existing role or user with id" + userId + " and  " + roleId);
     }
+
 
     private User getUser(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);

@@ -2,7 +2,6 @@ package uz.ilmnajot.school.controller;
 
 //import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,18 @@ public class UserController {
         this.userService = userService;
     }
 
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/addAdmin")
+    public HttpEntity<ApiResponse> addAdmin(@RequestBody UserRequest request) {
+        ApiResponse apiResponse = userService.addAdmin(request);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addUser")
     public HttpEntity<ApiResponse> addUser(@RequestBody UserRequest request) {
@@ -31,6 +42,8 @@ public class UserController {
                 ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUser/{userId}")
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
@@ -40,6 +53,8 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUsers")
     public HttpEntity<ApiResponse> getUsers() {
@@ -48,6 +63,8 @@ public class UserController {
                 ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/updateUser/{userId}")
@@ -60,6 +77,8 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteUser/{userId}")
     public HttpEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
@@ -68,6 +87,8 @@ public class UserController {
                 ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByName")
@@ -78,6 +99,8 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByEmail")
     public HttpEntity<ApiResponse> getUserByEmail(@RequestParam(name = "email") String email) {
@@ -87,8 +110,10 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+
+
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assignRoleToUser/{roleId}/{userId}")
+    @PostMapping("/addRole/{roleId}/{userId}")
     public HttpEntity<ApiResponse> assignRoleToUser(
             @PathVariable(name = "roleId") Long roleId,
             @PathVariable(name = "userId") Long userId){
@@ -96,10 +121,11 @@ public class UserController {
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
     }
+
+
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/removeRoleToUser/{roleId}/{userId}")
+    @DeleteMapping("/removeRole/{roleId}/{userId}")
     public HttpEntity<ApiResponse> removeRoleToUser(
             @PathVariable(name = "roleId") Long roleId,
             @PathVariable(name = "userId") Long userId){

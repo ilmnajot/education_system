@@ -1,11 +1,14 @@
 package uz.ilmnajot.school.model.response;
 
+import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.enums.Gender;
-import uz.ilmnajot.school.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,11 +25,11 @@ public class UserResponse {
 
     private String phoneNumber;
 
-    private String position;
+    private Position position;
 
     private SchoolName schoolName;
 
-    private RoleName roleName;
+//    private List<Role> role;
 
     private Gender gender;
 

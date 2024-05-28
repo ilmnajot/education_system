@@ -8,8 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
+import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
-import uz.ilmnajot.school.enums.RoleName;
+import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.repository.RoleRepository;
@@ -17,7 +18,6 @@ import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -36,7 +36,7 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Optional<Role> defaultRole = roleRepository.findByName("USER");
+//        Optional<Role> defaultRole = roleRepository.findByName("USER");
 //        Role role = defaultRole.orElseThrow(() -> new UserException("there is not found user role", HttpStatus.NOT_FOUND));
         try {
             AuditingAwareConfig.disableAuditing();
@@ -48,17 +48,24 @@ public class DataLoader implements CommandLineRunner {
                                 .lastName("Umarov")
                                 .email("ilmnajot2021@gmail.com")
                                 .phoneNumber("+998994107354")
-                                .position("Teacher")
+                                .position(Position.TEACHER)
                                 .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
 //                                .roles(Collections.singletonList(role))
-//                                .roles("")
+                                .roles(null)
                                 .gender(Gender.MALE)
                                 .password(passwordEncoder.encode("password"))
                                 .build());
-                roleRepository.save(
+                Role USER = roleRepository.save(
                         Role
                                 .builder()
-                                .name("User")
+                                .name("USER")
+                                .users(Collections.singletonList(user))
+                                .build());
+
+                Role ADMIN = roleRepository.save(
+                        Role
+                                .builder()
+                                .name("ADMIN")
                                 .users(Collections.singletonList(user))
                                 .build());
 

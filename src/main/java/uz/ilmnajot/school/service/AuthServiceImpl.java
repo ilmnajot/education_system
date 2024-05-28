@@ -2,8 +2,6 @@ package uz.ilmnajot.school.service;
 
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.enums.Gender;
-import uz.ilmnajot.school.enums.RoleName;
 import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
@@ -55,6 +53,10 @@ public class AuthServiceImpl implements AuthService {
     public ApiResponse register(UserRequest request) {
         Optional<Role> defaultRole = roleRepository.findByName("USER");
         Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+
+//        Optional<User> defaultSchoolName = userRepository.findBySchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
+//        User school = defaultSchoolName.orElseThrow(() -> new UserException("school not found"));
+
         Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
         if (userByEmail.isPresent()) {
             throw new UserException("User is already exist", HttpStatus.CONFLICT);
@@ -71,9 +73,9 @@ public class AuthServiceImpl implements AuthService {
             user.setEmail(request.getEmail());
             user.setPhoneNumber(request.getPhoneNumber());
             user.setPosition(request.getPosition());
-            user.setSchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
-            user.setRoles(Collections.singletonList(role));
+            user.setSchoolName(request.getSchoolName());
             user.setGender(request.getGender());
+            user.setRoles(Collections.singletonList(role));
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setEnabled(true);
             User savedUser = userRepository.save(user);

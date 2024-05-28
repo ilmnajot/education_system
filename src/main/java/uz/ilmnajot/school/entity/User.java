@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.ilmnajot.school.base.BaseEntity;
 import uz.ilmnajot.school.enums.Gender;
-import uz.ilmnajot.school.enums.RoleName;
+import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
 
 import java.util.Collection;
@@ -35,16 +35,13 @@ public class User extends BaseEntity implements UserDetails {
     @Column(unique = true)
     private String phoneNumber;
 
-    private String position; //enum
+    @Enumerated(EnumType.STRING)
+    private Position position; //enum
 
     @Enumerated(EnumType.STRING)
     private SchoolName schoolName;
 
-    @ManyToMany
-//    @JoinTable(
-//            name = "user_roles",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @Enumerated(EnumType.STRING)

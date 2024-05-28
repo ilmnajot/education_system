@@ -1,12 +1,9 @@
 package uz.ilmnajot.school.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import uz.ilmnajot.school.base.BaseEntity;
-import uz.ilmnajot.school.enums.RoleName;
+import uz.ilmnajot.school.enums.Authority;
 
 import java.util.List;
 
@@ -18,11 +15,15 @@ import java.util.List;
 @Builder
 public class Role extends BaseEntity {
 
+    @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
+    @ElementCollection
+    @Enumerated(value = EnumType.STRING)
+    private List<Authority> authorities;
 
     public static Role of(String name){
         Role role = new Role();
