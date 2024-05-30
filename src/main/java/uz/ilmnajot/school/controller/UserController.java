@@ -42,7 +42,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ADD_USER','GET_USER')")
+    @PreAuthorize("hasAuthority('GET_USER')")
     @GetMapping("/getUser/{userId}")
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.getUserById(userId);

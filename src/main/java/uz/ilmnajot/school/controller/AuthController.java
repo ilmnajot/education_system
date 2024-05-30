@@ -9,6 +9,10 @@ import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.LoginForm;
 import uz.ilmnajot.school.model.request.UserRequest;
 import uz.ilmnajot.school.service.AuthService;
+
+import static uz.ilmnajot.school.utils.AppConstants.SIGNIN;
+import static uz.ilmnajot.school.utils.AppConstants.SIGNUP;
+
 @SecurityRequirement(name = "Bearer")
 @RestController
 @CrossOrigin
@@ -22,7 +26,7 @@ public class AuthController {
     }
 
 //    @PreAuthorize("hasAuthority('ADD_USER')")
-    @PostMapping("/singUp")
+    @PostMapping("/signUp")
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
         ApiResponse register = authService.register(form);
         return register != null

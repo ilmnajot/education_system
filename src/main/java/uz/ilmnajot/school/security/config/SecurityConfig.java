@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,7 +18,7 @@ import uz.ilmnajot.school.security.jwt.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -35,8 +36,8 @@ public class SecurityConfig {
 //                .cors(Customizer.withDefaults())
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/signUp").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/signIn").permitAll()
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
