@@ -19,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.ilmnajot.school.utils.AppConstants;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -51,11 +52,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResponse register(UserRequest request) {
-        Optional<Role> defaultRole = roleRepository.findByName("USER");
-        Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
 
-//        Optional<User> defaultSchoolName = userRepository.findBySchoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL);
-//        User school = defaultSchoolName.orElseThrow(() -> new UserException("school not found"));
+        Optional<Role> defaultRole = roleRepository.findByName(AppConstants.USER);
+        Role role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
 
         Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
         if (userByEmail.isPresent()) {
@@ -75,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
             user.setPosition(request.getPosition());
             user.setSchoolName(request.getSchoolName());
             user.setGender(request.getGender());
-            user.setRoles(Collections.singletonList(role));
+            user.setRole(role);
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setEnabled(true);
             User savedUser = userRepository.save(user);

@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +17,7 @@ import uz.ilmnajot.school.security.jwt.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -32,14 +35,8 @@ public class SecurityConfig {
 //                .cors(Customizer.withDefaults())
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/singUp/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/users/deleteUser/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "users/assignRoleToUser/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users/removeRoleToUser/").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/users/updateUser/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/getUser/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/getUsers/**").permitAll()
+                        .requestMatchers("/api/auth/**")
+                        .permitAll()
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",

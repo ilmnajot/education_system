@@ -15,13 +15,10 @@ import java.util.List;
 @Builder
 public class Role extends BaseEntity {
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
-
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
     private List<Authority> authorities;
 

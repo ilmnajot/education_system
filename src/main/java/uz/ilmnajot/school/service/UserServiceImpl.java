@@ -175,7 +175,8 @@ public class UserServiceImpl implements UserService {
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
         user.setGender(request.getGender());
-        user.setRoles(Collections.singletonList(role));
+        user.setRole(null);
+//        user.setRoles(Collections.singletonList(role));
         return user;
     }
 
@@ -212,7 +213,7 @@ public class UserServiceImpl implements UserService {
         if (optionalRole.isPresent() && optionalUser.isPresent()) {
             Role role = optionalRole.get();
             User user = optionalUser.get();
-            user.getRoles().add(role);
+//            user.getRoles().add(role);
             userRepository.save(user);
             return new ApiResponse("success", true, "role has been saved successfully");
         }
@@ -227,7 +228,7 @@ public class UserServiceImpl implements UserService {
         if (optionalRole.isPresent() && optionalUser.isPresent()) {
             Role role = optionalRole.get();
             User user = optionalUser.get();
-            user.getRoles().remove(role);
+//            user.getRoles().remove(role);
             userRepository.save(user);
             return new ApiResponse("success", true, "role has been removed successfully");
         }

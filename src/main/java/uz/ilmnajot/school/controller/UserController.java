@@ -1,6 +1,4 @@
 package uz.ilmnajot.school.controller;
-
-//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -44,7 +42,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ADD_USER','GET_USER')")
     @GetMapping("/getUser/{userId}")
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.getUserById(userId);
@@ -55,7 +53,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('GET_USERS','ADD_USER')")
     @GetMapping("/getUsers")
     public HttpEntity<ApiResponse> getUsers() {
         ApiResponse apiResponse = userService.getUsers();
@@ -66,7 +64,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAuthority('UPDATE_USER')")
     @PutMapping("/updateUser/{userId}")
     public HttpEntity<ApiResponse> updateUser(
             @PathVariable Long userId,
@@ -79,7 +77,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('DELETE_USER')")
     @DeleteMapping("/deleteUser/{userId}")
     public HttpEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.deleteUser(userId);
@@ -90,7 +88,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByName")
     public HttpEntity<ApiResponse> getUserByName(@RequestParam(name = "name") String name) {
         ApiResponse apiResponse = userService.getUserByName(name);
@@ -101,7 +99,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByEmail")
     public HttpEntity<ApiResponse> getUserByEmail(@RequestParam(name = "email") String email) {
         ApiResponse apiResponse = userService.getUserByEmail(email);
@@ -112,7 +110,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADD_ROLE')")
     @PostMapping("/addRole/{roleId}/{userId}")
     public HttpEntity<ApiResponse> assignRoleToUser(
             @PathVariable(name = "roleId") Long roleId,
@@ -123,8 +121,7 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('DELETE_ROLE')")
     @DeleteMapping("/removeRole/{roleId}/{userId}")
     public HttpEntity<ApiResponse> removeRoleToUser(
             @PathVariable(name = "roleId") Long roleId,

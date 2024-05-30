@@ -16,8 +16,11 @@ import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
+import uz.ilmnajot.school.utils.AppConstants;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -34,42 +37,53 @@ public class DataLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-//        Optional<Role> defaultRole = roleRepository.findByName("USER");
-//        Role role = defaultRole.orElseThrow(() -> new UserException("there is not found user role", HttpStatus.NOT_FOUND));
         try {
             AuditingAwareConfig.disableAuditing();
             if (mode.equals("always")) {
-                User user = userRepository.save(
+
+                Authority[] authorities = Authority.values();
+
+                Role admin = roleRepository.save(new Role(
+                        AppConstants.ADMIN,
+                        Arrays.asList(authorities)
+                ));
+                Role user = roleRepository.save(new Role(
+                        AppConstants.USER,
+                        Arrays.asList(
+                                Authority.GET_USER, Authority.GET_USERS)
+                ));
+                userRepository.save(
                         User
                                 .builder()
                                 .firstName("Elbekjon")
                                 .lastName("Umarov")
-                                .email("ilmnajot2021@gmail.com")
-                                .phoneNumber("+998994107354")
+                                .email("ilmnajot2025@gmail.com")
+                                .phoneNumber("+998994107355")
                                 .position(Position.TEACHER)
                                 .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
-//                                .roles(Collections.singletonList(role))
-                                .roles(null)
+                                .role(admin)
                                 .gender(Gender.MALE)
                                 .password(passwordEncoder.encode("password"))
                                 .build());
-                Role USER = roleRepository.save(
-                        Role
+                userRepository.save(
+                        User
                                 .builder()
-                                .name("USER")
-                                .users(Collections.singletonList(user))
+                                .firstName("Elbekjon")
+                                .lastName("Umarov")
+                                .email("ilmnajot2024@gmail.com")
+                                .phoneNumber("+998994107354")
+                                .position(Position.TEACHER)
+                                .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
+                                .role(user)
+                                .gender(Gender.MALE)
+                                .password(passwordEncoder.encode("password"))
                                 .build());
 
-                Role ADMIN = roleRepository.save(
-                        Role
-                                .builder()
-                                .name("ADMIN")
-                                .users(Collections.singletonList(user))
-                                .build());
 
             }
+
 
         } finally {
             AuditingAwareConfig.enableAuditing();

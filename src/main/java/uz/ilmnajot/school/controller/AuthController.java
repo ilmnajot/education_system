@@ -21,7 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADD_USER')")
     @PostMapping("/singUp")
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
         ApiResponse register = authService.register(form);
@@ -30,7 +30,7 @@ public class AuthController {
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADD_USER')")
     @PostMapping("/signIn")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginForm form) {
         ApiResponse authenticate = authService.authenticate(form);

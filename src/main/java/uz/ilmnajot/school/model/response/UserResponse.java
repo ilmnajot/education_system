@@ -29,7 +29,7 @@ public class UserResponse {
 
     private SchoolName schoolName;
 
-//    private List<Role> role;
+//    private Role role;
 
     private Gender gender;
 
