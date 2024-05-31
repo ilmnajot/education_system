@@ -18,7 +18,7 @@ import uz.ilmnajot.school.security.jwt.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -38,6 +38,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST,"/api/auth/signUp").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/signIn").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/getUser/**").hasAuthority("GET_USER")
+                        .requestMatchers(HttpMethod.GET, "/users/getUsers/**").hasAuthority("GET_USERS")
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",

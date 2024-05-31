@@ -1,5 +1,7 @@
 package uz.ilmnajot.school.service;
 
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,14 +13,16 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
     public UserDetailsServiceCustom(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username)  {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserException("user not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
     }
 }

@@ -1,4 +1,5 @@
 package uz.ilmnajot.school.controller;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -47,10 +47,9 @@ public class UserController {
     public HttpEntity<ApiResponse> getUser(@PathVariable Long userId) {
         ApiResponse apiResponse = userService.getUserById(userId);
         return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 
 
     @PreAuthorize("hasAnyAuthority('GET_USERS','ADD_USER')")
@@ -58,10 +57,9 @@ public class UserController {
     public HttpEntity<ApiResponse> getUsers() {
         ApiResponse apiResponse = userService.getUsers();
         return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 
 
     @PreAuthorize("hasAuthority('UPDATE_USER')")
@@ -72,9 +70,8 @@ public class UserController {
         ApiResponse apiResponse = userService.updateUser(userId, request);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 
 
     @PreAuthorize("hasAuthority('DELETE_USER')")
@@ -83,54 +80,27 @@ public class UserController {
         ApiResponse apiResponse = userService.deleteUser(userId);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 
-
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    //    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByName")
     public HttpEntity<ApiResponse> getUserByName(@RequestParam(name = "name") String name) {
         ApiResponse apiResponse = userService.getUserByName(name);
         return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 
-
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    //    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getUserByEmail")
     public HttpEntity<ApiResponse> getUserByEmail(@RequestParam(name = "email") String email) {
         ApiResponse apiResponse = userService.getUserByEmail(email);
         return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-
-
-    @PreAuthorize("hasAuthority('ADD_ROLE')")
-    @PostMapping("/addRole/{roleId}/{userId}")
-    public HttpEntity<ApiResponse> assignRoleToUser(
-            @PathVariable(name = "roleId") Long roleId,
-            @PathVariable(name = "userId") Long userId){
-        ApiResponse apiResponse = userService.assignRoleToUser(roleId, userId);
-        return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @PreAuthorize("hasAuthority('DELETE_ROLE')")
-    @DeleteMapping("/removeRole/{roleId}/{userId}")
-    public HttpEntity<ApiResponse> removeRoleToUser(
-            @PathVariable(name = "roleId") Long roleId,
-            @PathVariable(name = "userId") Long userId){
-        ApiResponse apiResponse = userService.removeRoleToUser(roleId, userId);
-        return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
     }
 
 

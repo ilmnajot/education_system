@@ -1,4 +1,5 @@
 package uz.ilmnajot.school.entity;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -6,9 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.ilmnajot.school.base.BaseEntity;
+import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,11 +61,12 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return roles
-//                .stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName()))
-//                .collect(Collectors.toList());
-        return List.of(new SimpleGrantedAuthority(role.toString()));
+        List<Authority> authorities = role.getAuthorities();
+        return authorities
+                .stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.name()))
+                .toList();
+
     }
 
 

@@ -1,18 +1,42 @@
 package uz.ilmnajot.school.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.service.RoleService;
+import uz.ilmnajot.school.service.UserService;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
 
-    private final RoleService roleService;
+    private final UserService userService;
 
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
+
+    @PreAuthorize("hasAuthority('ADD_ROLE')")
+    @PostMapping("/addRole/{roleId}/{userId}")
+    public HttpEntity<ApiResponse> assignRoleToUser(
+            @PathVariable(name = "roleId") Long roleId,
+            @PathVariable(name = "userId") Long userId) {
+        ApiResponse apiResponse = userService.assignRoleToUser(roleId, userId);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
+    @PreAuthorize("hasAuthority('DELETE_ROLE')")
+    @DeleteMapping("/removeRole/{roleId}/{userId}")
+    public HttpEntity<ApiResponse> removeRoleToUser(
+            @PathVariable(name = "roleId") Long roleId,
+            @PathVariable(name = "userId") Long userId) {
+        ApiResponse apiResponse = userService.removeRoleToUser(roleId, userId);
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.FOUND).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
