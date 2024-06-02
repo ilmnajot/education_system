@@ -1,9 +1,7 @@
 package uz.ilmnajot.school.db;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.school.entity.Role;
@@ -12,16 +10,11 @@ import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
-import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.utils.AppConstants;
-
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
