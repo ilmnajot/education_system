@@ -1,5 +1,4 @@
 package uz.ilmnajot.school.entity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -11,11 +10,8 @@ import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
-
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
