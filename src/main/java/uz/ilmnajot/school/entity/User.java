@@ -41,6 +41,9 @@ public class User extends BaseEntity implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
 
+    @Column(name = "role_id",insertable = false, updatable = false)
+    private Long roleId;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

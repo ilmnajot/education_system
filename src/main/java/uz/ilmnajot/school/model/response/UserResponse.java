@@ -1,12 +1,14 @@
 package uz.ilmnajot.school.model.response;
 
 import uz.ilmnajot.school.entity.Role;
+import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
+import uz.ilmnajot.school.model.request.UserRequest;
 
 import java.util.List;
 
@@ -29,13 +31,21 @@ public class UserResponse {
 
     private SchoolName schoolName;
 
-    private Role role;
+    private Long roleId;
 
     private Gender gender;
 
-    //
-
-//    private String password;
-//
-//    private String rePassword;
+    public UserResponse userToDto(User user){
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setPosition(user.getPosition());
+        response.setSchoolName(user.getSchoolName());
+        response.setRoleId(user.getRoleId());
+        response.setGender(user.getGender());
+        return response;
+    }
 }

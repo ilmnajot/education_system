@@ -8,6 +8,7 @@ import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.UserRequest;
+import uz.ilmnajot.school.model.response.UserPro;
 import uz.ilmnajot.school.model.response.UserResponse;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 import static uz.ilmnajot.school.utils.AppConstants.USER;
 
 @Service
@@ -75,8 +77,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse getUserById(Long userId) {
         User user = getUser(userId);
-        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-        return new ApiResponse("User Found", true, userResponse);
+//        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        UserResponse userResponse = new UserResponse();
+        UserResponse response = userResponse.userToDto(user);
+        return new ApiResponse("User Found", true, response);
     }
 
     @Override
@@ -99,21 +103,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse updateUser(Long userId, UserRequest request) {
+        if (!isAdminOrSuperAdmin()) {
+            throw new UserException("SORRY, YOU DO NOT HAVE PERMISSION TO ADD NEW USER HERE", HttpStatus.BAD_REQUEST);
+        }
+        Role role;
+        Optional<Role> defaultRole = roleRepository.findByName(USER);
+        role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+        Long roleId = role.getId();
+        if (!userRepository.existsById(userId)) {
+            throw new UserException("no user found with id: " + userId, HttpStatus.NOT_FOUND);
+        }
         User user = getUser(userId);
         user.setId(userId);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setPhoneNumber(request.getPhoneNumber());
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
         user.setGender(request.getGender());
-//        user.setPassword(request.getPassword());
-//        user.setRoleName(request.getRoleName());
+        user.setRoleId(roleId);
         User savedUser = userRepository.save(user);
-        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-        return new ApiResponse("User Updated", true, userResponse);
+        UserResponse userResponse1 = new UserResponse();
+        UserResponse userResponse2 = userResponse1.userToDto(savedUser);
+//        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+        return new ApiResponse("User Updated", true, userResponse2);
     }
 
     @Override
@@ -124,14 +138,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse getUserByName(String fullName) {
-        Optional<User> userByName = userRepository.findByFullName(fullName);
-        if (userByName.isPresent()) {
-            User user = userByName.get();
-            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-            return new ApiResponse("USER FOUND", true, userResponse);
-        }
-        throw new UserException("User not found", HttpStatus.NOT_FOUND);
+    public ApiResponse getAllUsers() {
+//      UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        return new ApiResponse("USERS FOUND", true, userRepository.findAllByUsers());
     }
 
     @Override
@@ -154,22 +163,11 @@ public class UserServiceImpl implements UserService {
         Role role;
         Optional<Role> defaultRole = roleRepository.findByName(USER);
         role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+        Long roleId = role.getId();
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
         if (optionalUser.isPresent()) {
             throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        User user = getUser(request, role);
-        User savedUser = userRepository.save(user);
-
-        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-        return new ApiResponse("success", true, userResponse);
-
-    }
-
-    private User getUser(UserRequest request, Role role) {
-
-//        Optional<Role> defaultRole = roleRepository.findByName(USER);
-//        role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -178,8 +176,13 @@ public class UserServiceImpl implements UserService {
         user.setPosition(request.getPosition());
         user.setSchoolName(request.getSchoolName());
         user.setGender(request.getGender());
-//        user.setRole();
-        return user;
+        user.setRoleId(roleId);
+        User savedUser = userRepository.save(user);
+        UserResponse userResponse1 = new UserResponse();
+        UserResponse userResponse2 = userResponse1.userToDto(savedUser);
+//        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+        return new ApiResponse("success", true, userResponse2);
+
     }
 
     private boolean isAdminOrSuperAdmin() {
@@ -205,11 +208,31 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             throw new UserException("User already exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        User user = getUser(request, role);
-        User savedUser = userRepository.save(user);
+//        User user = getUser(request, role);
+//        User savedUser = userRepository.save(user);
 
-        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-        return new ApiResponse("success", true, userResponse);
+//        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+//        return new ApiResponse("success", true, userResponse);
+        return null;
+    }
+
+    @Override
+    public ApiResponse getUserByName(String name) {
+        List<User> optionalUser = userRepository.findByPartialNameOrLastName(name);
+
+        if (optionalUser.isEmpty()) {
+            throw new UserException("user not found", HttpStatus.NOT_FOUND);
+        }
+        List<UserResponse> responseList = optionalUser
+                .stream()
+                .map(user1 -> new UserResponse().userToDto(user1))
+                .toList();
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("User response", responseList);
+        responseMap.put("current page", 1);
+        responseMap.put("totalItems", responseList.size());
+        return new ApiResponse("Users Found", true, responseMap);
 
     }
 

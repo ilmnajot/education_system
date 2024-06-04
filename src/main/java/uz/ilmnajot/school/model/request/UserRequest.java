@@ -23,7 +23,7 @@ public class UserRequest {
 
     private SchoolName schoolName;
 
-    private Role role;
+    private Long roleId;
 
     private Gender gender;
 

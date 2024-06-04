@@ -46,7 +46,7 @@ public class JwtProvider {
     }
 
     private SecretKey getSigningKey() {
-        byte[] bytes = Decoders.BASE64.decode(securityKey);
+        byte[] bytes = Decoders.BASE64URL.decode(securityKey);
         return Keys.hmacShaKeyFor(bytes);
 
     }

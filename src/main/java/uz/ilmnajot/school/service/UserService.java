@@ -15,7 +15,7 @@ public interface UserService {
 
     ApiResponse deleteUser(Long userId);
 
-    ApiResponse getUserByName(String username);
+    ApiResponse getAllUsers();
 
     ApiResponse getUserByEmail(String email);
 
@@ -26,6 +26,8 @@ public interface UserService {
     ApiResponse removeRoleToUser(Long roleId, Long userId);
 
     ApiResponse addAdmin(UserRequest request);
+
+    ApiResponse getUserByName(String name);
 
 //    LoginResponse addUser(UserRequest request);
 }

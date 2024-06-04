@@ -83,18 +83,24 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
-    //    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAuthority('GET_USER')")
+    @GetMapping("/getAllUsers")
+    public HttpEntity<ApiResponse> getAllUsers() {
+        ApiResponse apiResponse = userService.getAllUsers();
+        return apiResponse != null
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PreAuthorize("hasAuthority('GET_USER')")
     @GetMapping("/getUserByName")
-    public HttpEntity<ApiResponse> getUserByName(@RequestParam(name = "name") String name) {
+    public HttpEntity<ApiResponse> getUsersByName(@RequestParam(name = "name") String name){
         ApiResponse apiResponse = userService.getUserByName(name);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
-    //    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAuthority('GET_USER')")
     @GetMapping("/getUserByEmail")
     public HttpEntity<ApiResponse> getUserByEmail(@RequestParam(name = "email") String email) {
         ApiResponse apiResponse = userService.getUserByEmail(email);
