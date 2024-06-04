@@ -22,7 +22,8 @@ public class UserRequest {
     private Position position;
 
     private SchoolName schoolName;
-//    private Role role;
+
+    private Role role;
 
     private Gender gender;
 

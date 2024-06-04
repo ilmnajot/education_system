@@ -32,7 +32,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADD_USER')")
     @PostMapping("/addUser")
     public HttpEntity<ApiResponse> addUser(@RequestBody UserRequest request) {
         ApiResponse apiResponse = userService.addUser(request);
@@ -52,7 +52,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('GET_USERS','ADD_USER')")
+    @PreAuthorize("hasAuthority('GET_USERS')")
     @GetMapping("/getUsers")
     public HttpEntity<ApiResponse> getUsers() {
         ApiResponse apiResponse = userService.getUsers();

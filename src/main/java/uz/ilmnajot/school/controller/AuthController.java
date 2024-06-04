@@ -25,6 +25,12 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @GetMapping("/test")
+    public HttpEntity<?> test(@RequestBody UserRequest form){
+        System.out.println(form);
+        return ResponseEntity.ok("test");
+    }
+
 //    @PreAuthorize("hasAuthority('ADD_USER')")
     @PostMapping("/signUp")
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
