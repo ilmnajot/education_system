@@ -22,7 +22,7 @@ public class RoleController {
 
 
 
-    @PreAuthorize("hasAuthority('ADD_USER')")
+    @PreAuthorize("hasAuthority('ADD_ROLE')")
     @PostMapping("/assignRoleToUser/{roleId}/{userId}")
     public HttpEntity<?> assignRoleToUser(
             @PathVariable(name = "roleId") Long roleId,

@@ -103,9 +103,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse updateUser(Long userId, UserRequest request) {
-        if (!isAdminOrSuperAdmin()) {
-            throw new UserException("SORRY, YOU DO NOT HAVE PERMISSION TO ADD NEW USER HERE", HttpStatus.BAD_REQUEST);
-        }
+//        if (!isAdminOrSuperAdmin()) {
+//            throw new UserException("SORRY, YOU DO NOT HAVE PERMISSION TO ADD NEW USER HERE", HttpStatus.BAD_REQUEST);
+//        }
         Role role;
         Optional<Role> defaultRole = roleRepository.findByName(USER);
         role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
@@ -139,8 +139,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse getAllUsers() {
-//      UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-        return new ApiResponse("USERS FOUND", true, userRepository.findAllByUsers());
+        List<UserPro> users = userRepository.findAllByUsers();
+        if (users.isEmpty()) {
+            throw new UserException("users not found", HttpStatus.NOT_FOUND);
+        }
+        return new ApiResponse("USERS FOUND", true, users);
     }
 
     @Override
@@ -148,8 +151,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> userByEmail = userRepository.findByEmail(email);
         if (userByEmail.isPresent()) {
             User user = userByEmail.get();
-            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-            return new ApiResponse("USER FOUND", true, userResponse);
+//            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+            UserResponse userResponse = new UserResponse();
+            UserResponse userResponse1 = userResponse.userToDto(user);
+            return new ApiResponse("USER FOUND", true, userResponse1);
         }
         throw new UserException("User not found", HttpStatus.NOT_FOUND);
     }
@@ -157,9 +162,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse addUser(UserRequest request) {
-        if (!isAdminOrSuperAdmin()) {
-            throw new UserException("SORRY, YOU DO NOT HAVE PERMISSION TO ADD NEW USER HERE", HttpStatus.BAD_REQUEST);
-        }
+//        if (!isAdminOrSuperAdmin()) {
+//            throw new UserException("SORRY, YOU DO NOT HAVE PERMISSION TO ADD NEW USER HERE", HttpStatus.BAD_REQUEST);
+//        }
         Role role;
         Optional<Role> defaultRole = roleRepository.findByName(USER);
         role = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
@@ -184,19 +189,19 @@ public class UserServiceImpl implements UserService {
         return new ApiResponse("success", true, userResponse2);
 
     }
-
-    private boolean isAdminOrSuperAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            for (GrantedAuthority authority : authorities) {
-                if ("ADD_USER".equals(authority.getAuthority()) || "DELETE_ROLE".equals(authority.getAuthority())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//
+//    private boolean isAdminOrSuperAdmin() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null) {
+//            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//            for (GrantedAuthority authority : authorities) {
+//                if ("ADD_USER".equals(authority.getAuthority()) || "DELETE_ROLE".equals(authority.getAuthority())) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
 
     @Override
@@ -246,13 +251,17 @@ public class UserServiceImpl implements UserService {
             User user = optionalUser.get();
             user.setRole(role);
             userRepository.save(user);
-            return new ApiResponse("success", true, "role has been saved successfully");
+            return new ApiResponse("success", true, "role has been saved successfully. role name: " + user.getRole().getName());
         }
         throw new UserException("there is no existing role or user with id" + userId + " and  " + roleId);
     }
 
     @Override
     public ApiResponse removeRoleToUser(Long roleId, Long userId) {
+        Role role_user;
+        Optional<Role> defaultRole = roleRepository.findByName(USER);
+        role_user = defaultRole.orElseThrow(() -> new UserException("role has not been found", HttpStatus.NOT_FOUND));
+
         Optional<Role> optionalRole = roleRepository.findById(roleId);
         Optional<User> optionalUser = userRepository.findById(userId);
 
@@ -261,11 +270,10 @@ public class UserServiceImpl implements UserService {
             User user = optionalUser.get();
 
             if (user.getRole().equals(role)) {
-
-                user.setRole(null);
+                user.setRole(role_user);
             }
             userRepository.save(user);
-            return new ApiResponse("success", true, "role has been removed successfully");
+            return new ApiResponse("success", true, "roleName: " + role.getName() + " has been removed successfully and has been set " + role_user.getName() + " to the user id " + user.getId());
         }
         throw new UserException("there is no existing role or user with id" + userId + " and  " + roleId);
     }

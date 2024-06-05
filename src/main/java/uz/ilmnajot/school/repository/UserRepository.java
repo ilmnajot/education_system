@@ -17,10 +17,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query(value = "select * from users  where users.email like %?1%", nativeQuery = true)
     Optional<User> findByEmail(/*@Param("email") */String username);
 
+//
+//    @Query(value = "select * from users where users.first_name like  %?1% OR  users.last_name like %?1%", nativeQuery = true )
+//    List<User> findByPartialNameOrLastName(@Param("name") String name);
 
-    @Query(value = "select * from users where users.first_name like  %?1% OR  users.last_name like %?1%", nativeQuery = true )
+    @Query(value = "SELECT * FROM users WHERE " +
+            "LOWER(users.first_name) LIKE " +
+            "LOWER(CONCAT('%', ?1, '%')) OR " +
+            "LOWER(users.last_name) LIKE " +
+            "LOWER(CONCAT('%', ?1, '%'))", nativeQuery = true)
     List<User> findByPartialNameOrLastName(@Param("name") String name);
-
 
 
 
