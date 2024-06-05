@@ -9,13 +9,13 @@ public interface UserService {
 
     ApiResponse getUserById(Long userId);
 
-    ApiResponse getUsers();
+    ApiResponse getAllUsers();
 
     ApiResponse updateUser(Long userId, UserRequest request);
 
     ApiResponse deleteUser(Long userId);
 
-    ApiResponse getAllUsers();
+    ApiResponse getUsers();
 
     ApiResponse getUserByEmail(String email);
 

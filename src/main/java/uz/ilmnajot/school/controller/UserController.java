@@ -51,11 +51,10 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
     @PreAuthorize("hasAuthority('GET_USERS')")
-    @GetMapping("/getUsers")
-    public HttpEntity<ApiResponse> getUsers() {
-        ApiResponse apiResponse = userService.getUsers();
+    @GetMapping("/getAllUsers")
+    public HttpEntity<ApiResponse> getAllUsers() {
+        ApiResponse apiResponse = userService.getAllUsers();
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -83,14 +82,17 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+
     @PreAuthorize("hasAuthority('GET_USER')")
-    @GetMapping("/getAllUsers")
-    public HttpEntity<ApiResponse> getAllUsers() {
-        ApiResponse apiResponse = userService.getAllUsers();
+    @GetMapping("/getUsers")
+    public HttpEntity<ApiResponse> getUsers() {
+        ApiResponse apiResponse = userService.getUsers();
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+
     @PreAuthorize("hasAuthority('GET_USER')")
     @GetMapping("/getUserByName")
     public HttpEntity<ApiResponse> getUsersByName(@RequestParam(name = "name") String name){

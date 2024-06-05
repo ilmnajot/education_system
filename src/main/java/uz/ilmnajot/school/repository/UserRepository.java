@@ -6,7 +6,7 @@ import uz.ilmnajot.school.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.ilmnajot.school.enums.SchoolName;
-import uz.ilmnajot.school.model.response.UserPro;
+import uz.ilmnajot.school.model.project.UserPro;
 
 import java.util.List;
 import java.util.Optional;

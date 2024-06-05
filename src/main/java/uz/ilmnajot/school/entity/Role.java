@@ -22,9 +22,5 @@ public class Role extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private List<Authority> authorities;
 
-    public static Role of(String name){
-        Role role = new Role();
-        role.setName(name);
-        return role;
-    }
+
  }

@@ -1,14 +1,11 @@
 package uz.ilmnajot.school.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.UserRequest;
-import uz.ilmnajot.school.model.response.UserPro;
+import uz.ilmnajot.school.model.project.UserPro;
 import uz.ilmnajot.school.model.response.UserResponse;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
@@ -19,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 import static uz.ilmnajot.school.utils.AppConstants.USER;
 
 @Service
@@ -84,14 +80,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse getUsers() {
+    public ApiResponse getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
             throw new UserException("No users found", HttpStatus.NOT_FOUND);
         }
         List<UserResponse> responseList = users
                 .stream()
-                .map(user -> modelMapper.map(user, UserResponse.class))
+                .map(user -> new UserResponse().userToDto(user))
                 .toList();
 
         Map<String, Object> responseMap = new HashMap<>();
@@ -138,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse getAllUsers() {
+    public ApiResponse getUsers() {
         List<UserPro> users = userRepository.findAllByUsers();
         if (users.isEmpty()) {
             throw new UserException("users not found", HttpStatus.NOT_FOUND);

@@ -1,7 +1,9 @@
-package uz.ilmnajot.school.model.response;
+package uz.ilmnajot.school.model.project;
 
 public interface RolePro {
     Long getId();
+
     String getName();
-    Boolean getHasrole();
+
+    Boolean getHasRole();
 }

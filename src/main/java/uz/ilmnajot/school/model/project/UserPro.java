@@ -1,4 +1,4 @@
-package uz.ilmnajot.school.model.response;
+package uz.ilmnajot.school.model.project;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -12,6 +12,7 @@ public interface UserPro {
     String getEmail();
     String getPhoneNumber();
     String getGender();
+
     @Value("#{@roleRepository.findAllByUserId(target.id)}")
     List<RolePro> getRoles();
 }
