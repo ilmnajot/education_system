@@ -1,8 +1,7 @@
-package uz.ilmnajot.school.service;
+package uz.ilmnajot.school.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

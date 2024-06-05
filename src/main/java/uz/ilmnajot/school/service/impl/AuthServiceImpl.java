@@ -1,8 +1,7 @@
-package uz.ilmnajot.school.service;
+package uz.ilmnajot.school.service.impl;
 
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.enums.SchoolName;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.LoginForm;
@@ -19,9 +18,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.ilmnajot.school.service.AuthService;
 import uz.ilmnajot.school.utils.AppConstants;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Service

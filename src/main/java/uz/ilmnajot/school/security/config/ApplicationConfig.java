@@ -1,7 +1,6 @@
 package uz.ilmnajot.school.security.config;
 
 import uz.ilmnajot.school.repository.UserRepository;
-import uz.ilmnajot.school.service.UserDetailsServiceCustom;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

@@ -53,11 +53,17 @@ public class DataLoader implements CommandLineRunner {
                                 GET_USER,
                                 GET_USERS,
                                 DELETE_USER,
-                                UPDATE_USER)));
+                                UPDATE_USER,
+                                ADD_NEWS,
+                                DELETE_NEWS,
+                                UPDATE_NEWS)));
                 Role user = roleRepository.save(new Role(
                         AppConstants.USER,
                         Arrays.asList(
-                                GET_USER, Authority.GET_USERS)
+                                GET_USER,
+                                GET_USERS,
+                                GET_NEWS,
+                                GET_ALL_NEWS)
                 ));
                 userRepository.save(
                         User

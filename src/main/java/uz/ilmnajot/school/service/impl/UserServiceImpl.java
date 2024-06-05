@@ -1,4 +1,4 @@
-package uz.ilmnajot.school.service;
+package uz.ilmnajot.school.service.impl;
 
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.ilmnajot.school.service.UserService;
 
 import java.util.*;
 

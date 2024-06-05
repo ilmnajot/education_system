@@ -35,7 +35,7 @@ public class UserResponse {
 
     private Gender gender;
 
-    public UserResponse userToDto(User user){
+    public  UserResponse userToDto(User user){
         UserResponse response = new UserResponse();
         response.setId(user.getId());
         response.setFirstName(user.getFirstName());

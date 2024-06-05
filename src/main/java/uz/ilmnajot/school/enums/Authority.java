@@ -7,5 +7,13 @@ public enum Authority {
     DELETE_USER,//ADMIN
     UPDATE_USER,//ADMIN
     ADD_ROLE,//ADMIN
-    DELETE_ROLE//ADMIN
+    DELETE_ROLE,//ADMIN
+
+    ///NEWS//
+    ADD_NEWS,
+    DELETE_NEWS,
+    UPDATE_NEWS,
+    GET_NEWS,
+    GET_ALL_NEWS
+
 }

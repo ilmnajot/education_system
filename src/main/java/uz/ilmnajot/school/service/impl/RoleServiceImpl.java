@@ -1,7 +1,8 @@
-package uz.ilmnajot.school.service;
+package uz.ilmnajot.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.school.repository.RoleRepository;
+import uz.ilmnajot.school.service.RoleService;
 
 @Service
 public class RoleServiceImpl implements RoleService {
