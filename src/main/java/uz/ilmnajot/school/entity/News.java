@@ -22,7 +22,7 @@ public class News extends BaseEntity {
     private String content; //for storing large text content
 
     @Lob
-    @Column(name = "images", columnDefinition = "BLOB")
+    @Column(name = "images", columnDefinition = "BYTEA")
     private byte[] images;      // for storing binary data as BLOB
 
     private LocalDateTime publishedDate;
