@@ -19,9 +19,10 @@ public class News extends BaseEntity {
     private String title;
 
     @Lob
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content; //for storing large text content
 
-    @Lob
+//    @Lob
     @Column(name = "images", columnDefinition = "BYTEA")
     private byte[] images;      // for storing binary data as BLOB
 

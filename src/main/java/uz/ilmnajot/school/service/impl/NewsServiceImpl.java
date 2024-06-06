@@ -2,6 +2,7 @@ package uz.ilmnajot.school.service.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.school.entity.News;
 import uz.ilmnajot.school.exception.UserException;
 import uz.ilmnajot.school.model.common.ApiResponse;
@@ -89,11 +90,16 @@ public class NewsServiceImpl implements NewsService {
     private ApiResponse getApiResponse(NewsRequest request, News news) {
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
-
-        try {
-            news.setImages(request.getImages().getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException("failed to process images ", e);
+        MultipartFile images = request.getImages();
+        if (images != null) {
+            try {
+                news.setImages(request.getImages().getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ApiResponse("error", false, e.getMessage());
+            }
+        } else {
+            news.setImages(null);
         }
         news.setPublishedDate(request.getPublishedDate());
         news.setAuthor(request.getAuthor());

@@ -1,21 +1,21 @@
 package uz.ilmnajot.school.db;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import uz.ilmnajot.school.entity.News;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
+import uz.ilmnajot.school.repository.NewsRepository;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.utils.AppConstants;
-
 import java.util.Arrays;
 
 import static uz.ilmnajot.school.enums.Authority.*;
@@ -33,6 +33,8 @@ public class DataLoader implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
 
+    private final NewsRepository newsRepository;
+
     @Override
     public void run(String... args) {
 
@@ -46,6 +48,7 @@ public class DataLoader implements CommandLineRunner {
                         AppConstants.SUPER_ADMIN,
                         Arrays.asList(authorities)
                 ));
+
                 Role admin = roleRepository.save(new Role(
                         AppConstants.ADMIN,
                         Arrays.asList(
@@ -57,6 +60,7 @@ public class DataLoader implements CommandLineRunner {
                                 ADD_NEWS,
                                 DELETE_NEWS,
                                 UPDATE_NEWS)));
+
                 Role user = roleRepository.save(new Role(
                         AppConstants.USER,
                         Arrays.asList(
@@ -106,6 +110,15 @@ public class DataLoader implements CommandLineRunner {
                                 .password(passwordEncoder.encode("password"))
                                 .build());
 
+                newsRepository.save(
+                        News
+                                .builder()
+                                .title("title here")
+                                .content("content here")
+                                .images(null)
+                                .publishedDate(null)
+                                .author("author")
+                                .build());
 
             }
 

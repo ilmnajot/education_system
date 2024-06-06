@@ -22,6 +22,7 @@ public class NewsResponse {
 
     public static NewsResponse newsToDto(News news){
         NewsResponse dto = new NewsResponse();
+        dto.setId(news.getId());
         dto.title = news.getTitle();
         dto.content = news.getContent();
         dto.images = news.getImages();

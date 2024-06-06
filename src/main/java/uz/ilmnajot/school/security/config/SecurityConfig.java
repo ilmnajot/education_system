@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/auth/signIn").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/getUser/**").hasAuthority("GET_USER")
                         .requestMatchers(HttpMethod.GET, "/users/getUsers/**").hasAuthority("GET_USERS")
+                        .requestMatchers(HttpMethod.POST, "/api/news/addArticle/**").hasAuthority("ADD_NEWS")
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",

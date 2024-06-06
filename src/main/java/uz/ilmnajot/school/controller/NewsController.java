@@ -1,7 +1,10 @@
 package uz.ilmnajot.school.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,25 +14,61 @@ import uz.ilmnajot.school.model.request.NewsRequest;
 import uz.ilmnajot.school.service.NewsService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
 
     private final NewsService newsService;
+    private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
+
+    private static final List<DateTimeFormatter> DATE_FORMATTERS = Arrays.asList(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
     @PreAuthorize("hasAuthority('ADD_NEWS')")
-    @PostMapping("/addArticle")
+    @PostMapping(value = "/addNews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public HttpEntity<ApiResponse> addNews(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("images") MultipartFile images,
-            @RequestParam("publishedDate") String publishedDate,
+            @RequestParam(value = "images", required = false) MultipartFile images,
+            @RequestParam(value = "publishedDate", required = false) String publishedDate,
             @RequestParam("author") String author) {
+
+        logger.debug("Title: {}", title);
+        logger.debug("Content: {}", content);
+        logger.debug("Images: {}", images != null ? images.getOriginalFilename() : "null");
+        logger.debug("Published Date: {}", publishedDate);
+        logger.debug("Author: {}", author);
+
+        if (publishedDate == null || publishedDate.trim().isEmpty()) {
+            logger.error("Published date is empty or null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Published date is required"));
+        }
+        LocalDateTime parsedDate = null;
+        for (DateTimeFormatter formatter : DATE_FORMATTERS) {
+            try {
+                parsedDate = LocalDateTime.parse(publishedDate, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                // Continue to the next formatter
+            }
+        }
+        if (parsedDate == null) {
+            logger.error("Error parsing published date: {}", publishedDate);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
+        }
         NewsRequest newsRequest = new NewsRequest();
         newsRequest.setTitle(title);
         newsRequest.setContent(content);
