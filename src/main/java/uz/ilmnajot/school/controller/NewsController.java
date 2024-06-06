@@ -46,29 +46,29 @@ public class NewsController {
             @RequestParam(value = "publishedDate", required = false) String publishedDate,
             @RequestParam("author") String author) {
 
-        logger.debug("Title: {}", title);
-        logger.debug("Content: {}", content);
-        logger.debug("Images: {}", images != null ? images.getOriginalFilename() : "null");
-        logger.debug("Published Date: {}", publishedDate);
-        logger.debug("Author: {}", author);
-
-        if (publishedDate == null || publishedDate.trim().isEmpty()) {
-            logger.error("Published date is empty or null");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Published date is required"));
-        }
-        LocalDateTime parsedDate = null;
-        for (DateTimeFormatter formatter : DATE_FORMATTERS) {
-            try {
-                parsedDate = LocalDateTime.parse(publishedDate, formatter);
-                break;
-            } catch (DateTimeParseException e) {
-                // Continue to the next formatter
-            }
-        }
-        if (parsedDate == null) {
-            logger.error("Error parsing published date: {}", publishedDate);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
-        }
+//        logger.debug("Title: {}", title);
+//        logger.debug("Content: {}", content);
+//        logger.debug("Images: {}", images != null ? images.getOriginalFilename() : "null");
+//        logger.debug("Published Date: {}", publishedDate);
+//        logger.debug("Author: {}", author);
+//
+//        if (publishedDate == null || publishedDate.trim().isEmpty()) {
+//            logger.error("Published date is empty or null");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Published date is required"));
+//        }
+//        LocalDateTime parsedDate = null;
+//        for (DateTimeFormatter formatter : DATE_FORMATTERS) {
+//            try {
+//                parsedDate = LocalDateTime.parse(publishedDate, formatter);
+//                break;
+//            } catch (DateTimeParseException e) {
+//                // Continue to the next formatter
+//            }
+//        }
+//        if (parsedDate == null) {
+//            logger.error("Error parsing published date: {}", publishedDate);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
+//        }
         NewsRequest newsRequest = new NewsRequest();
         newsRequest.setTitle(title);
         newsRequest.setContent(content);

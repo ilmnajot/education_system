@@ -1,6 +1,6 @@
 package uz.ilmnajot.school.controller;
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +12,11 @@ import uz.ilmnajot.school.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addAdmin")
@@ -95,7 +91,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('GET_USER')")
     @GetMapping("/getUserByName")
-    public HttpEntity<ApiResponse> getUsersByName(@RequestParam(name = "name") String name){
+    public HttpEntity<ApiResponse> getUsersByName(@RequestParam(name = "name") String name) {
         ApiResponse apiResponse = userService.getUserByName(name);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
