@@ -1,9 +1,11 @@
 package uz.ilmnajot.school.db;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import uz.ilmnajot.school.entity.Course;
 import uz.ilmnajot.school.entity.News;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
@@ -11,11 +13,13 @@ import uz.ilmnajot.school.enums.Authority;
 import uz.ilmnajot.school.enums.Gender;
 import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
+import uz.ilmnajot.school.repository.CourseRepository;
 import uz.ilmnajot.school.repository.NewsRepository;
 import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.utils.AppConstants;
+
 import java.util.Arrays;
 
 import static uz.ilmnajot.school.enums.Authority.*;
@@ -34,6 +38,8 @@ public class DataLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
 
     private final NewsRepository newsRepository;
+
+    private final CourseRepository courseRepository;
 
     @Override
     public void run(String... args) {
@@ -59,7 +65,18 @@ public class DataLoader implements CommandLineRunner {
                                 UPDATE_USER,
                                 ADD_NEWS,
                                 DELETE_NEWS,
-                                UPDATE_NEWS)));
+                                UPDATE_NEWS, ADD_COURSE,
+                                ADD_USER_TO_COURSE,
+                                DELETE_USER_FROM_COURSE,
+                                DELETE_COURSE,
+                                UPDATE_COURSE,
+
+                                GET_COURSE,
+                                GET_COURSE_BY_STUDENT_ID,
+                                GET_STUDENTS_BY_COURSE_ID,
+                                GET_ALL_COURSE
+
+                        )));
 
                 Role user = roleRepository.save(new Role(
                         AppConstants.USER,
@@ -67,7 +84,9 @@ public class DataLoader implements CommandLineRunner {
                                 GET_USER,
                                 GET_USERS,
                                 GET_NEWS,
-                                GET_ALL_NEWS)
+                                GET_ALL_NEWS,
+                                GET_COURSE,
+                                GET_ALL_COURSE)
                 ));
                 userRepository.save(
                         User
@@ -120,6 +139,17 @@ public class DataLoader implements CommandLineRunner {
                                 .author("author")
                                 .build());
 
+
+                courseRepository.save(
+                        Course
+                                .builder()
+                                .name("Maths")
+                                .description("Maths descriptions here")
+                                .instructor("Elbek_Umarov")
+                                .imageUrl("image_url here")
+                                .durationInHours(2.0)
+                                .build()
+                );
             }
 
 

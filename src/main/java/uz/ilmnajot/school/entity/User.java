@@ -12,6 +12,8 @@ import uz.ilmnajot.school.enums.Position;
 import uz.ilmnajot.school.enums.SchoolName;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -40,6 +42,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Course> courses;
 
     @Column(name = "role_id",insertable = false, updatable = false)
     private Long roleId;

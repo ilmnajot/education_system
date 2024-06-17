@@ -14,6 +14,20 @@ public enum Authority {
     DELETE_NEWS,
     UPDATE_NEWS,
     GET_NEWS,
-    GET_ALL_NEWS
+    GET_ALL_NEWS,
+
+
+    // course
+    ADD_COURSE,
+    ADD_USER_TO_COURSE,
+    DELETE_USER_FROM_COURSE,
+    DELETE_COURSE,
+    UPDATE_COURSE,
+
+    GET_COURSE,
+    GET_COURSE_BY_STUDENT_ID,
+    GET_STUDENTS_BY_COURSE_ID,
+    GET_ALL_COURSE,
+
 
 }

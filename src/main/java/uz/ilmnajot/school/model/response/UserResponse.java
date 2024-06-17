@@ -36,16 +36,23 @@ public class UserResponse {
     private Gender gender;
 
     public  UserResponse userToDto(User user){
-        UserResponse response = new UserResponse();
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setEmail(user.getEmail());
-        response.setPhoneNumber(user.getPhoneNumber());
-        response.setPosition(user.getPosition());
-        response.setSchoolName(user.getSchoolName());
-        response.setRoleId(user.getRoleId());
-        response.setGender(user.getGender());
-        return response;
+        this.setId(user.getId());
+        this.setFirstName(user.getFirstName());
+        this.setLastName(user.getLastName());
+        this.setEmail(user.getEmail());
+        this.setPhoneNumber(user.getPhoneNumber());
+        this.setPosition(user.getPosition());
+        this.setSchoolName(user.getSchoolName());
+        this.setRoleId(user.getRoleId());
+        this.setGender(user.getGender());
+        return this;
     }
+    public UserResponse toDto(User user){
+        this.setId(user.getId());
+        this.setFirstName(user.getFirstName());
+        this.setLastName(user.getLastName());
+        this.setEmail(user.getEmail());
+        return this;
+    }
+
 }
