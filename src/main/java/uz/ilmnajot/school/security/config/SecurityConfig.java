@@ -38,9 +38,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST,"/api/auth/signUp").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/signIn").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/getUser/**").hasAuthority("GET_USER")
-                        .requestMatchers(HttpMethod.GET, "/users/getUsers/**").hasAuthority("GET_USERS")
-                        .requestMatchers(HttpMethod.POST, "/api/news/addArticle/**").hasAuthority("ADD_NEWS")
+//                        .requestMatchers(HttpMethod.GET, "/users/getUser/**").hasAuthority("GET_USER")
+//                        .requestMatchers(HttpMethod.GET, "/users/getUsers/**").hasAuthority("GET_USERS")
+//                        .requestMatchers(HttpMethod.POST, "/api/news/addNews/**").hasAuthority("ADD_NEWS")
+//                        .requestMatchers(HttpMethod.POST, "/courses/addCourse").hasAuthority("ADD_COURSE")
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",

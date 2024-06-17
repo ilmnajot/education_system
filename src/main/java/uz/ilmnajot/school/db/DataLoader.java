@@ -63,9 +63,14 @@ public class DataLoader implements CommandLineRunner {
                                 GET_USERS,
                                 DELETE_USER,
                                 UPDATE_USER,
+
                                 ADD_NEWS,
                                 DELETE_NEWS,
-                                UPDATE_NEWS, ADD_COURSE,
+                                UPDATE_NEWS,
+                                GET_NEWS,
+                                GET_ALL_NEWS,
+
+                                ADD_COURSE,
                                 ADD_USER_TO_COURSE,
                                 DELETE_USER_FROM_COURSE,
                                 DELETE_COURSE,

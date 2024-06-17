@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import uz.ilmnajot.school.service.CourseService;
 @RestController
 @RequestMapping("/courses")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer")
 public class CourseController {
 
     private final CourseService courseService;

@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
+@SecurityRequirement(name = "Bearer")
 public class NewsController {
 
     private final NewsService newsService;
@@ -37,7 +39,7 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @PreAuthorize("hasAuthority('ADD_NEWS')")
+    @PreAuthorize("hasAuthority('ADD_NEWS')") //it does not work...
     @PostMapping(value = "/addNews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public HttpEntity<ApiResponse> addNews(
             @RequestParam("title") String title,
@@ -46,29 +48,29 @@ public class NewsController {
             @RequestParam(value = "publishedDate", required = false) String publishedDate,
             @RequestParam("author") String author) {
 
-//        logger.debug("Title: {}", title);
-//        logger.debug("Content: {}", content);
-//        logger.debug("Images: {}", images != null ? images.getOriginalFilename() : "null");
-//        logger.debug("Published Date: {}", publishedDate);
-//        logger.debug("Author: {}", author);
-//
-//        if (publishedDate == null || publishedDate.trim().isEmpty()) {
-//            logger.error("Published date is empty or null");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Published date is required"));
-//        }
-//        LocalDateTime parsedDate = null;
-//        for (DateTimeFormatter formatter : DATE_FORMATTERS) {
-//            try {
-//                parsedDate = LocalDateTime.parse(publishedDate, formatter);
-//                break;
-//            } catch (DateTimeParseException e) {
-//                // Continue to the next formatter
-//            }
-//        }
-//        if (parsedDate == null) {
-//            logger.error("Error parsing published date: {}", publishedDate);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
-//        }
+        logger.debug("Title: {}", title);
+        logger.debug("Content: {}", content);
+        logger.debug("Images: {}", images != null ? images.getOriginalFilename() : "null");
+        logger.debug("Published Date: {}", publishedDate);
+        logger.debug("Author: {}", author);
+
+        if (publishedDate == null || publishedDate.trim().isEmpty()) {
+            logger.error("Published date is empty or null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Published date is required"));
+        }
+        LocalDateTime parsedDate = null;
+        for (DateTimeFormatter formatter : DATE_FORMATTERS) {
+            try {
+                parsedDate = LocalDateTime.parse(publishedDate, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                // Continue to the next formatter
+            }
+        }
+        if (parsedDate == null) {
+            logger.error("Error parsing published date: {}", publishedDate);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
+        }
         NewsRequest newsRequest = new NewsRequest();
         newsRequest.setTitle(title);
         newsRequest.setContent(content);
@@ -81,7 +83,7 @@ public class NewsController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PreAuthorize("hasAuthority('GET_NEWS')")
+    @PreAuthorize("hasAuthority('GET_NEWS')") //it works...
     @GetMapping("/getNews/{newsId}")
     public HttpEntity<ApiResponse> getNews(@PathVariable(name = "newsId") Long newsId) {
         ApiResponse apiResponse = newsService.getNewsById(newsId);
@@ -90,7 +92,7 @@ public class NewsController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_NEWS')")
+    @PreAuthorize("hasAuthority('GET_ALL_NEWS')") //it works...
     @GetMapping("/allNews")
     public HttpEntity<ApiResponse> getAllNews() {
         ApiResponse allNews = newsService.getAllNews();
@@ -99,7 +101,7 @@ public class NewsController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PreAuthorize("hasAuthority('DELETE_NEWS')")
+    @PreAuthorize("hasAuthority('DELETE_NEWS')") //it works...
     @DeleteMapping("/deleteNews/{newsId}")
     public HttpEntity<ApiResponse> removeArticle(@PathVariable(name = "newsId") Long newsId) {
         ApiResponse apiResponse = newsService.deleteNews(newsId);
@@ -108,7 +110,7 @@ public class NewsController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_NEWS')")
+    @PreAuthorize("hasAuthority('UPDATE_NEWS')") //it works...
     @PutMapping("/updateNews/{newsId}")
     public HttpEntity<ApiResponse> updateNews(
             @RequestBody NewsRequest request,

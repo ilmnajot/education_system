@@ -58,7 +58,7 @@ public class NewsServiceImpl implements NewsService {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("News response", list);
         responseMap.put("current page", 1);
-        responseMap.put("totalItems", responseMap.size());
+        responseMap.put("totalItems", list.size());
         return new ApiResponse("Users Found", true, responseMap);
     }
 
