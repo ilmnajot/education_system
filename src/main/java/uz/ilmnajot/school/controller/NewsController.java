@@ -63,13 +63,13 @@ public class NewsController {
             try {
                 parsedDate = LocalDateTime.parse(publishedDate, formatter);
                 break;
-            } catch (DateTimeParseException e) {
-                // Continue to the next formatter
+            } catch (DateTimeParseException ignored) {
+
             }
         }
         if (parsedDate == null) {
             logger.error("Error parsing published date: {}", publishedDate);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false",false, "Invalid date format"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("false", false, "Invalid date format"));
         }
         NewsRequest newsRequest = new NewsRequest();
         newsRequest.setTitle(title);
