@@ -11,7 +11,7 @@ import uz.ilmnajot.school.enums.Gender;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
+@Entity(name = "CHILDREN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

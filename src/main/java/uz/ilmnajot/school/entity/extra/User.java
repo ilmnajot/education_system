@@ -2,12 +2,10 @@ package uz.ilmnajot.school.entity.extra;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import uz.ilmnajot.school.base.BaseEntity;
 import uz.ilmnajot.school.enums.Education;
-import uz.ilmnajot.school.enums.FamilyStatus;
 import uz.ilmnajot.school.enums.Gender;
 
 import java.time.LocalDateTime;
@@ -18,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-public class GreenCard extends BaseEntity {
+@Entity(name = "USERS")
+public class User extends BaseEntity {
 
     @NotNull
     private String firstName;

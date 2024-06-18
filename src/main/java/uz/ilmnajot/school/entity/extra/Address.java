@@ -11,7 +11,7 @@ import uz.ilmnajot.school.enums.Country;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "ADDRESS")
 @Data
 @Builder
 public class Address extends BaseEntity {

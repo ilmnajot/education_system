@@ -10,7 +10,7 @@ import uz.ilmnajot.school.base.BaseEntity;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "PASSPORT")
 @Builder
 public class Passport extends BaseEntity {
 
