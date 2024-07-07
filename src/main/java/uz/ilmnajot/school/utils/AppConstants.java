@@ -6,6 +6,6 @@ public interface AppConstants {
     String ADMIN = "ADMIN";
     String SUPER_ADMIN = "SUPER_ADMIN";
 
-    String SIGNUP = "/signUp";
-    String SIGNIN = "/signIn";
+    public String SIGNUP = "/signUp";
+    public String SIGNIN = "/signIn";
 }

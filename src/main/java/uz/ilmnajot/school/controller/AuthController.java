@@ -13,6 +13,7 @@ import uz.ilmnajot.school.service.AuthService;
 import static uz.ilmnajot.school.utils.AppConstants.SIGNIN;
 import static uz.ilmnajot.school.utils.AppConstants.SIGNUP;
 
+
 @SecurityRequirement(name = "Bearer")
 @RestController
 @CrossOrigin
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
 //    @PreAuthorize("hasAuthority('ADD_USER')")
-    @PostMapping("/signUp")
+    @PostMapping(SIGNUP)
     public HttpEntity<ApiResponse> register(@RequestBody UserRequest form) {
         ApiResponse register = authService.register(form);
         return register != null
@@ -41,7 +42,7 @@ public class AuthController {
     }
 
 //    @PreAuthorize("hasRole('ADD_USER')")
-    @PostMapping("/signIn")
+    @PostMapping(SIGNIN)
     public ResponseEntity<ApiResponse> login(@RequestBody LoginForm form) {
         ApiResponse authenticate = authService.authenticate(form);
         return authenticate != null

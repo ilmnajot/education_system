@@ -1,5 +1,4 @@
 package uz.ilmnajot.school.service.impl;
-
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import uz.ilmnajot.school.repository.UserRepository;

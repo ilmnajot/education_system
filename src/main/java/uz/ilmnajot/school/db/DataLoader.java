@@ -1,5 +1,4 @@
 package uz.ilmnajot.school.db;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -19,10 +18,10 @@ import uz.ilmnajot.school.repository.RoleRepository;
 import uz.ilmnajot.school.repository.UserRepository;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.utils.AppConstants;
-
 import java.util.Arrays;
-
 import static uz.ilmnajot.school.enums.Authority.*;
+
+
 
 @Component
 @RequiredArgsConstructor
@@ -51,9 +50,9 @@ public class DataLoader implements CommandLineRunner {
                 Authority[] authorities = Authority.values();
 
                 Role super_admin = roleRepository.save(new Role(
+
                         AppConstants.SUPER_ADMIN,
-                        Arrays.asList(authorities)
-                ));
+                        Arrays.asList(authorities)));
 
                 Role admin = roleRepository.save(new Role(
                         AppConstants.ADMIN,
@@ -83,7 +82,8 @@ public class DataLoader implements CommandLineRunner {
 
                         )));
 
-                Role user = roleRepository.save(new Role(
+                Role user = roleRepository.save(
+                        new Role(
                         AppConstants.USER,
                         Arrays.asList(
                                 GET_USER,
@@ -120,6 +120,7 @@ public class DataLoader implements CommandLineRunner {
                                 .gender(Gender.MALE)
                                 .password(passwordEncoder.encode("password"))
                                 .build());
+
                 userRepository.save(
                         User
                                 .builder()
@@ -144,7 +145,6 @@ public class DataLoader implements CommandLineRunner {
                                 .author("author")
                                 .build());
 
-
                 courseRepository.save(
                         Course
                                 .builder()
@@ -153,10 +153,8 @@ public class DataLoader implements CommandLineRunner {
                                 .instructor("Elbek_Umarov")
                                 .imageUrl("image_url here")
                                 .durationInHours(2.0)
-                                .build()
-                );
+                                .build());
             }
-
 
         } finally {
             AuditingAwareConfig.enableAuditing();
