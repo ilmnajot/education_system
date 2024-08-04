@@ -70,7 +70,6 @@ public class User extends BaseEntity implements UserDetails {
                 .stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.name()))
                 .toList();
-
     }
 
 
