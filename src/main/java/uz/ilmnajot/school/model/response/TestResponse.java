@@ -1,6 +1,8 @@
 package uz.ilmnajot.school.model.response;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import uz.ilmnajot.school.entity.test.Answer;
 import uz.ilmnajot.school.entity.test.Question;
@@ -14,21 +16,18 @@ public class TestResponse {
 
     private Long id;
 
-    private String text;
+    private String name;
 
-    private String mark;
+    private String description;
 
-    private QuestionType questionType;
+    private List<Question> questions;
 
-//    private Test test;
-
-//    private List<Answer> answers;
-
-    public TestResponse toTestResponse(Question question) {
+    public TestResponse toTestResponse(Test test) {
         TestResponse response = new TestResponse();
-        response.setId(question.getId());
-        response.setMark(question.getMark());
-        response.setQuestionType(question.getQuestionType());
+        response.setId(test.getId());
+        response.setName(test.getName());
+        response.setDescription(test.getDescription());
+        response.setQuestions(test.getQuestions());
         return response;
     }
 

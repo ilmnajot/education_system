@@ -8,6 +8,7 @@ import uz.ilmnajot.school.enums.QuestionType;
 import uz.ilmnajot.school.exception.BaseException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.response.TestResponse;
+import uz.ilmnajot.school.model.response.TestResponses;
 import uz.ilmnajot.school.repository.*;
 import uz.ilmnajot.school.service.TestService;
 
@@ -56,7 +57,12 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ApiResponse addQuestionsToTest(Long testId, String text, QuestionType questionType, String mark, List<Answer> answers) {
+    public ApiResponse addQuestionsToTest(
+            Long testId,
+            String text,
+            QuestionType questionType,
+            String mark,
+            List<Answer> answers) {
         Test test = testRepository.findById(testId).orElseThrow(()
                 -> new BaseException("there is no test with id: " + testId, HttpStatus.NOT_FOUND));
         Question question = Question.builder()
@@ -72,8 +78,8 @@ public class TestServiceImpl implements TestService {
             answerRepository.save(answer);
         }
         Question savedQuestion = questionRepository.save(question);
-        TestResponse testResponse = new TestResponse().toTestResponse(savedQuestion);
-        return new ApiResponse("success", true, testResponse);
+        TestResponses testResponses = new TestResponses().toTestResponse(savedQuestion);
+        return new ApiResponse("success", true, testResponses);
     }
 
     @Override
@@ -126,6 +132,13 @@ public class TestServiceImpl implements TestService {
 
         TestAttempt savedAttempt = testAttemptRepository.save(testAttempt);
         return new ApiResponse("success", true, savedAttempt);
+    }
+
+    @Override
+    public ApiResponse getTest(Long testId) {
+        Test test = getTestById(testId);
+        TestResponse testResponse = new TestResponse().toTestResponse(test);
+        return new ApiResponse("success", true, testResponse);
     }
 
 

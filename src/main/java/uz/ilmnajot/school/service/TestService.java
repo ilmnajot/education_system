@@ -16,4 +16,6 @@ public interface TestService {
     ApiResponse submitAnswer(Long attemptId, Long questionId, Long answerId);
 
     ApiResponse completeTest(Long attemptId);
+
+    ApiResponse getTest(Long testId);
 }

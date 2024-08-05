@@ -70,4 +70,12 @@ public class TestController {
                 ? ResponseEntity.status(HttpStatus.CREATED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @GetMapping("/getTest/{testId}")
+    public HttpEntity<ApiResponse> getTest(@PathVariable(name = "testId") Long testId){
+        ApiResponse apiResponse = testService.getTest(testId);
+        return apiResponse !=null
+                ? ResponseEntity.status(HttpStatus.CREATED).body(apiResponse)
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }
