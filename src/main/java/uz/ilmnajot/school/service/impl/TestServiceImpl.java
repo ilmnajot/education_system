@@ -7,13 +7,16 @@ import uz.ilmnajot.school.entity.test.*;
 import uz.ilmnajot.school.enums.QuestionType;
 import uz.ilmnajot.school.exception.BaseException;
 import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.TestRequest;
 import uz.ilmnajot.school.model.response.TestResponse;
 import uz.ilmnajot.school.model.response.TestResponses;
 import uz.ilmnajot.school.repository.*;
 import uz.ilmnajot.school.service.TestService;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -78,7 +81,7 @@ public class TestServiceImpl implements TestService {
             answerRepository.save(answer);
         }
         Question savedQuestion = questionRepository.save(question);
-        TestResponses testResponses = new TestResponses().toTestResponse(savedQuestion);
+        TestResponses testResponses = new TestResponses().toTestResponse(savedQuestion.getTest());// todo
         return new ApiResponse("success", true, testResponses);
     }
 
@@ -139,6 +142,38 @@ public class TestServiceImpl implements TestService {
         Test test = getTestById(testId);
         TestResponse testResponse = new TestResponse().toTestResponse(test);
         return new ApiResponse("success", true, testResponse);
+    }
+
+    @Override
+    public ApiResponse findAllTests() {
+        List<Test> tests = testRepository.findAll();
+        List<TestResponses> list = tests
+                .stream()
+                .map(test -> new TestResponses().toTestResponse(test))
+                .toList();
+        Map<String, Object> data = new HashMap<>();
+        data.put("tests", list);
+        data.put("currentPage", 1);
+        data.put("totalPages", list.size());
+        return new ApiResponse("success", true, data);
+    }
+
+    @Override
+    public ApiResponse updateTest(Long testId, TestRequest request) {
+        Test test = getTestById(testId);
+        test.setId(testId);
+        test.setName(request.getName());
+        test.setDescription(request.getDescription());
+        Test updatedTest = testRepository.save(test);
+        TestResponse testResponse = new TestResponse().toTestResponse(updatedTest);
+        return new ApiResponse("success", true, testResponse);
+    }
+
+    @Override
+    public ApiResponse deleteTest(Long testId) {
+        getTestById(testId);
+        testRepository.deleteById(testId);
+        return new ApiResponse("success", true, "test with id: " + testId + " has been removed");
     }
 
 

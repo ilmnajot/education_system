@@ -22,7 +22,7 @@ public class QuestionResponse {
 
     private Long testId;
 
-    private List<Answer> answers;
+//    private List<Answer> answers;
 
     public QuestionResponse toQuestionResponse(Question question) {
         QuestionResponse response = new QuestionResponse();
@@ -30,7 +30,7 @@ public class QuestionResponse {
         response.setText(question.getText());
         response.setMark(question.getMark());
         response.setQuestionType(question.getQuestionType());
-        response.setAnswers(question.getAnswers());
+//        response.setAnswers(question.getAnswers());
         return response;
 
     }
