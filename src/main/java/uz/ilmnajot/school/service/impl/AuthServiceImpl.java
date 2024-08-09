@@ -39,7 +39,15 @@ public class AuthServiceImpl implements AuthService {
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
 
-    public AuthServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, UserServiceImpl userService, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, ModelMapper modelMapper, RoleRepository roleRepository, RoleRepository roleRepository1) {
+    public AuthServiceImpl(
+            UserRepository userRepository,
+            AuthenticationManager authenticationManager,
+            UserServiceImpl userService,
+            JwtProvider jwtProvider,
+            PasswordEncoder passwordEncoder,
+            ModelMapper modelMapper,
+            RoleRepository roleRepository,
+            RoleRepository roleRepository1) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.userService = userService;

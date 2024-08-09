@@ -4,6 +4,7 @@ import org.apache.catalina.core.ApplicationPushBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.school.entity.test.Answer;
 import uz.ilmnajot.school.enums.QuestionType;
@@ -23,6 +24,7 @@ public class TestController {
         this.testService = testService;
     }
 
+    @PreAuthorize("hasAuthority('ADD_TEST')")
     @PostMapping("/addTest") // working...
     public HttpEntity<ApiResponse> createTest(
             @RequestParam String name,
@@ -33,6 +35,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('ADD_QUESTION')")
     @PostMapping("/addQuestion")
     public HttpEntity<ApiResponse> addQuestionToTest(
             @RequestParam(name = "testId") Long testId,
@@ -46,6 +49,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('START_TEST')")
     @PostMapping("/{testId}/start")
     public HttpEntity<ApiResponse> startTest(
             @PathVariable(name = "testId") Long testId,
@@ -56,18 +60,19 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('ATTEMPT_TES')")
     @PostMapping("/attempts/{attemptId}/answer")
     public HttpEntity<ApiResponse> submitTest(
             @PathVariable(name = "attemptId") Long attemptId,
             @RequestParam(name = "questionId") Long questionId,
-            @RequestParam(name = "answerId") Long answerId
-    ) {
+            @RequestParam(name = "answerId") Long answerId) {
         ApiResponse apiResponse = testService.submitAnswer(attemptId, questionId, answerId);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.CREATED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('COMPLETE_TEST')")
     @PostMapping("/attempts/{attemptId}/complete")
     public HttpEntity<ApiResponse> completeTest(@PathVariable(name = "attemptId") Long attemptId) {
         ApiResponse apiResponse = testService.completeTest(attemptId);
@@ -76,6 +81,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('GET_TEST')")
     @GetMapping("/getTest/{testId}")
     public HttpEntity<ApiResponse> getTest(@PathVariable(name = "testId") Long testId) {
         ApiResponse apiResponse = testService.getTest(testId);
@@ -84,6 +90,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('GET_ALL_TEST')")
     @GetMapping("/getAllTests")
     public HttpEntity<ApiResponse> getAllTests() {
         ApiResponse apiResponse = testService.findAllTests();
@@ -92,6 +99,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('UDPATE_TEST')")
     @PutMapping("/updateTest/{testId}")
     public HttpEntity<ApiResponse> updateTest(@PathVariable(name = "testId") Long testId,
                                               @RequestBody TestRequest request) {
@@ -101,6 +109,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PreAuthorize("hasAuthority('DELETE_TEST')")
     @DeleteMapping("/deleteTest/{testId}")
     public HttpEntity<ApiResponse> deleteTest(@PathVariable(name = "testId") Long testId) {
         ApiResponse apiResponse = testService.deleteTest(testId);

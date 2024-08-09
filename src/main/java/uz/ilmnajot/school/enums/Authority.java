@@ -29,5 +29,21 @@ public enum Authority {
     GET_STUDENTS_BY_COURSE_ID,
     GET_ALL_COURSE,
 
+    //*************************test****************//
+    ADD_TEST, //ADMIN
+    GET_TEST, //USER
+    DELETE_TEST,    //ADMIN
+    UPDATE_TEST, //ADMIN
+    GET_ALL_TEST, //USER
+    START_TEST, //USER
+    ATTEMPT_TEST,    //USER
+    COMPLETE_TEST, //USER
+
+    ADD_QUESTION, //ADMIN
+    DELETE_QUESTION, //ADMIN
+    UPDATE_QUESTION, //ADMIN
+    GET_QUESTION, //USER
+    GET_ALL_QUESTION, //USER
+
 
 }

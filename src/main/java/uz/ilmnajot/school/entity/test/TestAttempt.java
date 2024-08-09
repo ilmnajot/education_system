@@ -1,12 +1,10 @@
 package uz.ilmnajot.school.entity.test;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.ilmnajot.school.entity.User;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,4 +1,5 @@
 package uz.ilmnajot.school.db;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -8,19 +9,17 @@ import uz.ilmnajot.school.entity.Course;
 import uz.ilmnajot.school.entity.News;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.enums.Authority;
-import uz.ilmnajot.school.enums.Gender;
-import uz.ilmnajot.school.enums.Position;
-import uz.ilmnajot.school.enums.SchoolName;
-import uz.ilmnajot.school.repository.CourseRepository;
-import uz.ilmnajot.school.repository.NewsRepository;
-import uz.ilmnajot.school.repository.RoleRepository;
-import uz.ilmnajot.school.repository.UserRepository;
+import uz.ilmnajot.school.entity.test.Question;
+import uz.ilmnajot.school.entity.test.Test;
+import uz.ilmnajot.school.enums.*;
+import uz.ilmnajot.school.repository.*;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
 import uz.ilmnajot.school.utils.AppConstants;
-import java.util.Arrays;
-import static uz.ilmnajot.school.enums.Authority.*;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static uz.ilmnajot.school.enums.Authority.*;
 
 
 @Component
@@ -39,6 +38,10 @@ public class DataLoader implements CommandLineRunner {
     private final NewsRepository newsRepository;
 
     private final CourseRepository courseRepository;
+
+    private final TestRepository testRepository;
+
+    private final QuestionRepository questionRepository;
 
     @Override
     public void run(String... args) {
@@ -78,21 +81,45 @@ public class DataLoader implements CommandLineRunner {
                                 GET_COURSE,
                                 GET_COURSE_BY_STUDENT_ID,
                                 GET_STUDENTS_BY_COURSE_ID,
-                                GET_ALL_COURSE
+                                GET_ALL_COURSE,
+
+                                ADD_TEST,
+                                GET_TEST,
+                                DELETE_TEST,
+                                UPDATE_TEST,
+                                GET_ALL_TEST,
+                                START_TEST,
+                                ATTEMPT_TEST,
+                                COMPLETE_TEST,
+
+                                ADD_QUESTION,
+                                DELETE_QUESTION,
+                                UPDATE_QUESTION,
+                                GET_QUESTION,
+                                GET_ALL_QUESTION
 
                         )));
 
                 Role user = roleRepository.save(
                         new Role(
-                        AppConstants.USER,
-                        Arrays.asList(
-                                GET_USER,
-                                GET_USERS,
-                                GET_NEWS,
-                                GET_ALL_NEWS,
-                                GET_COURSE,
-                                GET_ALL_COURSE)
-                ));
+                                AppConstants.USER,
+                                Arrays.asList(
+                                        GET_USER,
+                                        GET_USERS,
+                                        GET_NEWS,
+                                        GET_ALL_NEWS,
+                                        GET_COURSE,
+                                        GET_ALL_COURSE,
+
+                                        GET_TEST,
+                                        GET_ALL_TEST,
+                                        START_TEST,
+                                        ATTEMPT_TEST,
+                                        COMPLETE_TEST,
+
+                                        GET_QUESTION,
+                                        GET_ALL_QUESTION)
+                        ));
                 userRepository.save(
                         User
                                 .builder()
@@ -154,6 +181,26 @@ public class DataLoader implements CommandLineRunner {
                                 .imageUrl("image_url here")
                                 .durationInHours(2.0)
                                 .build());
+
+                Question question = questionRepository.save(
+                        Question
+                                .builder()
+                                .id(1L)
+                                .text("please find out the marked place")
+                                .mark("1")
+                                .questionType(QuestionType.SHORT_ANSWER)
+                                .build());
+
+
+                testRepository.save(
+                        Test
+                                .builder()
+                                .id(1L)
+                                .name("English")
+                                .description("English descriptions here")
+                                .questions(List.of(question))
+                                .build());
+
             }
 
         } finally {

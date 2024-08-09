@@ -60,12 +60,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ApiResponse addQuestionsToTest(
-            Long testId,
-            String text,
-            QuestionType questionType,
-            String mark,
-            List<Answer> answers) {
+    public ApiResponse addQuestionsToTest(Long testId, String text, QuestionType questionType, String mark, List<Answer> answers) {
         Test test = testRepository.findById(testId).orElseThrow(()
                 -> new BaseException("there is no test with id: " + testId, HttpStatus.NOT_FOUND));
         Question question = Question.builder()

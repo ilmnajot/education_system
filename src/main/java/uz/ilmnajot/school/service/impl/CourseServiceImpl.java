@@ -32,7 +32,6 @@ public class CourseServiceImpl implements CourseService {
             throw new UserException("Course already exists", HttpStatus.CONFLICT);
         }
         Course course = new Course();
-
         course.setName(request.getName());
         course.setDescription(request.getDescription());
         course.setInstructor(request.getInstructor());
@@ -51,7 +50,6 @@ public class CourseServiceImpl implements CourseService {
             throw new UserException("Course already exists", HttpStatus.CONFLICT);
         }
         course.setId(courseId);
-
         course.setName(request.getName());
         course.setDescription(request.getDescription());
         course.setInstructor(request.getInstructor());
@@ -64,6 +62,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void savedCourse(CourseRequest request, Course course) {
+
         course.setName(request.getName());
         course.setDescription(request.getDescription());
         course.setInstructor(request.getInstructor());
