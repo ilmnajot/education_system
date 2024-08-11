@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.school.entity.User;
 import uz.ilmnajot.school.entity.quiz.*;
+import uz.ilmnajot.school.enums.TestAttemptStatus;
 import uz.ilmnajot.school.exception.BaseException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.QuestionRequest;
@@ -114,6 +115,9 @@ public class TestServiceImpl implements TestService {
                 .user(user)
                 .test(test)
                 .startedTime(LocalDateTime.now())
+                .endedTime(LocalDateTime.now().plusHours(2))
+                .score(0)
+                .testAttemptStatus(TestAttemptStatus.IN_PROGRESS)
                 .build();
         TestAttempt savedTest = testAttemptRepository.save(attempt);
         return new ApiResponse("success", true, savedTest);
@@ -123,10 +127,12 @@ public class TestServiceImpl implements TestService {
     public ApiResponse submitAnswer(Long attemptId, Long questionId, Long answerId) {
 
         Question question = getQuestionById(questionId);
-
         Option answer = getAnswerById(answerId);
-
         TestAttempt testAttempt = getAttemptById(attemptId);
+
+        double totalScore = 0.0;
+        List<AnswerAttempt> attempts = new ArrayList<>();
+
 
         if (!answer.getQuestion().equals(question)) {
             throw new BaseException("Wrong answer", HttpStatus.BAD_REQUEST);
@@ -137,8 +143,8 @@ public class TestServiceImpl implements TestService {
                 .builder()
                 .testAttempt(testAttempt)
                 .question(question)
-                .answer(answer)
-                .isCorrect(correct)
+                .selectedOption(answer)
+                .correct(correct)
                 .build();
 
         AnswerAttempt savedAttempt = answerAttemptRepository.save(attempt);
@@ -182,7 +188,7 @@ public class TestServiceImpl implements TestService {
         Map<String, Object> data = new HashMap<>();
         data.put("tests", list);
         data.put("currentPage", 1);
-        data.put("totalPages", list.size());
+        data.put("totalItems", list.size());
         return new ApiResponse("success", true, data);
     }
 

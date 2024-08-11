@@ -19,16 +19,16 @@ public class AnswerAttempt {
 
 
     @ManyToOne
-    @JoinColumn(name = "test_attempt_id")
+    @JoinColumn(name = "test_attempt_id", nullable = false)
     private TestAttempt testAttempt;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "answer_id")
-    private Option answer;
+    @JoinColumn(name = "selected_option_id")
+    private Option selectedOption;
 
-    private boolean isCorrect;
+    private boolean correct;
 }

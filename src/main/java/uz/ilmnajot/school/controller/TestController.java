@@ -1,5 +1,6 @@
 package uz.ilmnajot.school.controller;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import uz.ilmnajot.school.service.TestService;
 
 import java.util.List;
 
+@ComponentScan
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -57,7 +59,7 @@ public class TestController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PreAuthorize("hasAuthority('ATTEMPT_TES')")
+    @PreAuthorize("hasAuthority('ATTEMPT_TEST')")
     @PostMapping("/attempts/{attemptId}/answer")
     public HttpEntity<ApiResponse> submitTest(
             @PathVariable(name = "attemptId") Long attemptId,
@@ -79,7 +81,7 @@ public class TestController {
     }
 
     @PreAuthorize("hasAuthority('GET_TEST')")
-    @GetMapping("/getTest/{testId}")
+    @GetMapping("/getTest/{testId}")  //working...
     public HttpEntity<ApiResponse> getTest(@PathVariable(name = "testId") Long testId) {
         ApiResponse apiResponse = testService.getTest(testId);
         return apiResponse != null
@@ -88,7 +90,7 @@ public class TestController {
     }
 
     @PreAuthorize("hasAuthority('GET_ALL_TEST')")
-    @GetMapping("/getAllTests")
+    @GetMapping("/getAllTests") //working...
     public HttpEntity<ApiResponse> getAllTests() {
         ApiResponse apiResponse = testService.findAllTests();
         return apiResponse != null
@@ -107,7 +109,7 @@ public class TestController {
     }
 
     @PreAuthorize("hasAuthority('DELETE_TEST')")
-    @DeleteMapping("/deleteTest/{testId}")
+    @DeleteMapping("/deleteTest/{testId}") //working...
     public HttpEntity<ApiResponse> deleteTest(@PathVariable(name = "testId") Long testId) {
         ApiResponse apiResponse = testService.deleteTest(testId);
         return apiResponse != null
