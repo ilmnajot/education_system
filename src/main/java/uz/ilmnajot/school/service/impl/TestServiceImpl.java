@@ -3,10 +3,10 @@ package uz.ilmnajot.school.service.impl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.entity.test.*;
-import uz.ilmnajot.school.enums.QuestionType;
+import uz.ilmnajot.school.entity.quiz.*;
 import uz.ilmnajot.school.exception.BaseException;
 import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.QuestionRequest;
 import uz.ilmnajot.school.model.request.TestRequest;
 import uz.ilmnajot.school.model.response.TestResponse;
 import uz.ilmnajot.school.model.response.TestResponses;
@@ -14,10 +14,7 @@ import uz.ilmnajot.school.repository.*;
 import uz.ilmnajot.school.service.TestService;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TestServiceImpl implements TestService {
@@ -60,24 +57,51 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ApiResponse addQuestionsToTest(Long testId, String text, QuestionType questionType, String mark, List<Answer> answers) {
+    public ApiResponse addQuestionsToTest(Long testId, List<QuestionRequest> requests) {
+
         Test test = testRepository.findById(testId).orElseThrow(()
                 -> new BaseException("there is no test with id: " + testId, HttpStatus.NOT_FOUND));
-        Question question = Question.builder()
-                .text(text)
-                .mark(mark)
-                .questionType(questionType)
-                .test(test)
-                .answers(answers)
-                .build();
 
-        for (Answer answer : answers) {
-            answer.setQuestion(question);
-            answerRepository.save(answer);
+        List<Question> questions = new ArrayList<>();
+
+        for (QuestionRequest request : requests) {
+            if (request.getOptions() == null || request.getOptions().isEmpty()) {
+                throw new BaseException("options is empty", HttpStatus.BAD_REQUEST);
+            }
+            boolean hasCorrectOption = request
+                    .getOptions()
+                    .stream()
+                    .anyMatch(Option::isCorrect);
+            if (!hasCorrectOption) {
+                throw new BaseException("A question must have at least one correct option", HttpStatus.BAD_REQUEST);
+            }
+
+            boolean anyMatch = test
+                    .getQuestions()
+                    .stream()
+                    .anyMatch(existingQuestion -> existingQuestion.getText().equals(request.getText()));
+            if (!anyMatch) {
+                Question question = Question
+                        .builder()
+                        .text(request.getText())
+                        .mark(request.getMark())
+                        .difficultyLevel(request.getDifficultyLevel())
+                        .level(request.getLevel())
+                        .questionType(request.getQuestionType())
+                        .test(test)
+                        .options(request.getOptions())
+                        .build();
+
+                request
+                        .getOptions()
+                        .forEach(option -> option.setQuestion(question));
+                questions.add(question);
+
+            }
         }
-        Question savedQuestion = questionRepository.save(question);
-        TestResponses testResponses = new TestResponses().toTestResponse(savedQuestion.getTest());// todo
-        return new ApiResponse("success", true, testResponses);
+        questionRepository.saveAll(questions);
+        TestResponse testResponse = new TestResponse().toTestResponse(test);
+        return new ApiResponse("success", true, testResponse);
     }
 
     @Override
@@ -85,7 +109,8 @@ public class TestServiceImpl implements TestService {
         Test test = getTestById(testId);
         User user = getUserById(userId);
 
-        TestAttempt attempt = TestAttempt.builder()
+        TestAttempt attempt = TestAttempt
+                .builder()
                 .user(user)
                 .test(test)
                 .startedTime(LocalDateTime.now())
@@ -96,12 +121,20 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public ApiResponse submitAnswer(Long attemptId, Long questionId, Long answerId) {
+
         Question question = getQuestionById(questionId);
-        Answer answer = getAnswerById(answerId);
+
+        Option answer = getAnswerById(answerId);
+
         TestAttempt testAttempt = getAttemptById(attemptId);
+
+        if (!answer.getQuestion().equals(question)) {
+            throw new BaseException("Wrong answer", HttpStatus.BAD_REQUEST);
+        }
         boolean correct = answer.isCorrect();
 
-        AnswerAttempt attempt = AnswerAttempt.builder()
+        AnswerAttempt attempt = AnswerAttempt
+                .builder()
                 .testAttempt(testAttempt)
                 .question(question)
                 .answer(answer)
@@ -204,8 +237,8 @@ public class TestServiceImpl implements TestService {
         throw new BaseException("there is no question with id: " + questionId, HttpStatus.NOT_FOUND);
     }
 
-    private Answer getAnswerById(Long answerId) {
-        Optional<Answer> byId = answerRepository.findById(answerId);
+    private Option getAnswerById(Long answerId) {
+        Optional<Option> byId = answerRepository.findById(answerId);
         if (byId.isPresent()) {
             return byId.get();
         }

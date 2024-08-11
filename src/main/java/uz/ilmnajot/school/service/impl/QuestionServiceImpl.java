@@ -1,8 +1,8 @@
 package uz.ilmnajot.school.service.impl;
 
 import org.springframework.stereotype.Service;
-import uz.ilmnajot.school.entity.test.Question;
-import uz.ilmnajot.school.entity.test.Test;
+import uz.ilmnajot.school.entity.quiz.Question;
+import uz.ilmnajot.school.entity.quiz.Test;
 import uz.ilmnajot.school.exception.BaseException;
 import uz.ilmnajot.school.model.common.ApiResponse;
 import uz.ilmnajot.school.model.request.QuestionRequest;

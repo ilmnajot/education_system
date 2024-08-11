@@ -9,8 +9,9 @@ import uz.ilmnajot.school.entity.Course;
 import uz.ilmnajot.school.entity.News;
 import uz.ilmnajot.school.entity.Role;
 import uz.ilmnajot.school.entity.User;
-import uz.ilmnajot.school.entity.test.Question;
-import uz.ilmnajot.school.entity.test.Test;
+import uz.ilmnajot.school.entity.quiz.Option;
+import uz.ilmnajot.school.entity.quiz.Question;
+import uz.ilmnajot.school.entity.quiz.Test;
 import uz.ilmnajot.school.enums.*;
 import uz.ilmnajot.school.repository.*;
 import uz.ilmnajot.school.security.config.AuditingAwareConfig;
@@ -42,6 +43,8 @@ public class DataLoader implements CommandLineRunner {
     private final TestRepository testRepository;
 
     private final QuestionRepository questionRepository;
+
+    private final AnswerRepository answerRepository;
 
     @Override
     public void run(String... args) {
@@ -139,7 +142,7 @@ public class DataLoader implements CommandLineRunner {
                                 .builder()
                                 .firstName("Elbekjon")
                                 .lastName("Umarov")
-                                .email("ilmnajot2025@gmail.com")
+                                .email("ilmnajot2022@gmail.com")
                                 .phoneNumber("+998994107355")
                                 .position(Position.TEACHER)
                                 .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
@@ -153,7 +156,7 @@ public class DataLoader implements CommandLineRunner {
                                 .builder()
                                 .firstName("Elbekjon")
                                 .lastName("Umarov")
-                                .email("ilmnajot2024@gmail.com")
+                                .email("ilmnajot2021@gmail.com")
                                 .phoneNumber("+998994107354")
                                 .position(Position.TEACHER)
                                 .schoolName(SchoolName.SAMARKAND_PRESIDENTIAL_SCHOOL)
@@ -182,24 +185,101 @@ public class DataLoader implements CommandLineRunner {
                                 .durationInHours(2.0)
                                 .build());
 
-                Question question = questionRepository.save(
-                        Question
-                                .builder()
-                                .id(1L)
-                                .text("please find out the marked place")
-                                .mark("1")
-                                .questionType(QuestionType.SHORT_ANSWER)
-                                .build());
 
 
-                testRepository.save(
+                Test test = testRepository.save(
                         Test
                                 .builder()
-                                .id(1L)
-                                .name("English")
+                                .name("Maths")
                                 .description("English descriptions here")
-                                .questions(List.of(question))
+//                                .questions(questions)
                                 .build());
+
+                Question quest = new Question();
+                quest.setText("what is 10+20?");
+                quest.setMark(1.0);
+                quest.setDifficultyLevel(DifficultyLevel.EASY);
+                quest.setLevel(Level.LEVEL_IGCSE);
+                quest.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                quest.setTest(test);
+                questionRepository.save(quest);
+
+
+                List<Option> options = List.of(
+                        new Option("10", false,quest),
+                        new Option( "20", false,quest),
+                        new Option( "30", true,quest),
+                        new Option( "40", false,quest)
+
+                );
+                answerRepository.saveAll(options);
+
+                Question quest2 = new Question();
+                quest.setText("what is 102+20?");
+                quest.setMark(1.0);
+                quest.setDifficultyLevel(DifficultyLevel.EASY);
+                quest.setLevel(Level.LEVEL_IGCSE);
+                quest.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                quest.setTest(test);
+                questionRepository.save(quest2);
+
+                List<Option> options2 = List.of(
+                        new Option( "10", false,quest2),
+                        new Option( "20", false,quest2),
+                        new Option( "30", true,quest2),
+                        new Option( "40", false,quest2)
+
+                );
+                answerRepository.saveAll(options2);
+
+                Question quest3 = new Question();
+                quest.setText("what is 110+20?");
+                quest.setMark(1.0);
+                quest.setDifficultyLevel(DifficultyLevel.EASY);
+                quest.setLevel(Level.LEVEL_IGCSE);
+                quest.setQuestionType(QuestionType.MULTIPLE_CHOICE)
+                ;quest.setTest(test);
+                questionRepository.save(quest3);
+
+                List<Option> options3 = List.of(
+                        new Option( "10", false,quest3),
+                        new Option( "20", false,quest3),
+                        new Option( "30", true,quest3),
+                        new Option( "40", false,quest3)
+
+                );
+                answerRepository.saveAll(options3);
+
+                Question quest4 = new Question();
+                quest.setText("what is 10+20?");
+                quest.setMark(1.0);
+                quest.setDifficultyLevel(DifficultyLevel.EASY);
+                quest.setLevel(Level.LEVEL_IGCSE);
+                quest.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                quest.setTest(test);
+                questionRepository.save(quest4);
+
+                List<Option> options4 = List.of(
+                        new Option( "10", false,quest4),
+                        new Option( "20", false,quest4),
+                        new Option( "30", true,quest4),
+                        new Option( "40", false,quest4)
+
+                );
+                answerRepository.saveAll(options4);
+
+
+
+//                List<Question> questions = List.of(
+//                        new Question("what is 5+5?", 1.0, DifficultyLevel.EASY, Level.LEVEL_IGCSE, QuestionType.MULTIPLE_CHOICE, test, options),
+//                        new Question( "what is 5+5?", 1.0, DifficultyLevel.EASY, Level.LEVEL_IGCSE, QuestionType.MULTIPLE_CHOICE, test, options2),
+//                        new Question( "what is 5+5?", 1.0, DifficultyLevel.EASY, Level.LEVEL_IGCSE, QuestionType.MULTIPLE_CHOICE, test, options3),
+//                        new Question( "what is 5+5?", 1.0, DifficultyLevel.EASY, Level.LEVEL_IGCSE, QuestionType.MULTIPLE_CHOICE, test, options4)
+//
+//                );
+//
+//                questionRepository.saveAll(questions);
+
 
             }
 

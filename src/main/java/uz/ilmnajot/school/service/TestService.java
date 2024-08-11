@@ -1,8 +1,7 @@
 package uz.ilmnajot.school.service;
 
-import uz.ilmnajot.school.entity.test.Answer;
-import uz.ilmnajot.school.enums.QuestionType;
 import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.QuestionRequest;
 import uz.ilmnajot.school.model.request.TestRequest;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 public interface TestService {
     ApiResponse createTest(String name, String description);
 
-    ApiResponse addQuestionsToTest(Long testId, String text, QuestionType questionType, String mark,List<Answer> answers);
+    ApiResponse addQuestionsToTest(Long testId,  List<QuestionRequest> requests);
 
     ApiResponse startTest(Long testId, Long userId);
 

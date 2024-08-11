@@ -1,13 +1,8 @@
 package uz.ilmnajot.school.model.response;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import uz.ilmnajot.school.entity.test.Answer;
-import uz.ilmnajot.school.entity.test.Question;
-import uz.ilmnajot.school.entity.test.Test;
+import uz.ilmnajot.school.entity.quiz.Question;
 import uz.ilmnajot.school.enums.QuestionType;
-
-import java.util.List;
 
 @Data
 public class QuestionResponse {
@@ -16,7 +11,7 @@ public class QuestionResponse {
 
     private String text;
 
-    private String mark;
+    private double mark;
 
     private QuestionType questionType;
 

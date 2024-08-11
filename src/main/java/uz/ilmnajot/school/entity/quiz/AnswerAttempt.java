@@ -1,4 +1,4 @@
-package uz.ilmnajot.school.entity.test;
+package uz.ilmnajot.school.entity.quiz;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public class AnswerAttempt {
 
     @ManyToOne
     @JoinColumn(name = "answer_id")
-    private Answer answer;
+    private Option answer;
 
     private boolean isCorrect;
 }

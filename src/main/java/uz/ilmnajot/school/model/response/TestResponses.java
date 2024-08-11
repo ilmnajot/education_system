@@ -1,14 +1,7 @@
 package uz.ilmnajot.school.model.response;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
-import uz.ilmnajot.school.entity.test.Question;
-import uz.ilmnajot.school.entity.test.Test;
-import uz.ilmnajot.school.enums.QuestionType;
-
-import java.util.List;
+import uz.ilmnajot.school.entity.quiz.Test;
 
 @Data
 public class TestResponses {

@@ -1,4 +1,4 @@
-package uz.ilmnajot.school.entity.test;
+package uz.ilmnajot.school.entity.quiz;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

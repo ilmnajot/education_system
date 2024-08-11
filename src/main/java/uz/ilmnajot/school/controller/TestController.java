@@ -1,14 +1,14 @@
 package uz.ilmnajot.school.controller;
 
-import org.apache.catalina.core.ApplicationPushBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.ilmnajot.school.entity.test.Answer;
+import uz.ilmnajot.school.entity.quiz.Option;
 import uz.ilmnajot.school.enums.QuestionType;
 import uz.ilmnajot.school.model.common.ApiResponse;
+import uz.ilmnajot.school.model.request.QuestionRequest;
 import uz.ilmnajot.school.model.request.TestRequest;
 import uz.ilmnajot.school.service.TestService;
 
@@ -39,11 +39,8 @@ public class TestController {
     @PostMapping("/addQuestion")
     public HttpEntity<ApiResponse> addQuestionToTest(
             @RequestParam(name = "testId") Long testId,
-            @RequestParam(name = "text") String text,
-            @RequestParam QuestionType questionType,
-            @RequestParam(name = "mark") String mark,
-            @RequestBody List<Answer> answers) {
-        ApiResponse apiResponse = testService.addQuestionsToTest(testId, text, questionType, mark, answers);
+            @RequestBody List<QuestionRequest> requests) {
+        ApiResponse apiResponse = testService.addQuestionsToTest(testId, requests);
         return apiResponse != null
                 ? ResponseEntity.status(HttpStatus.CREATED).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -86,7 +83,7 @@ public class TestController {
     public HttpEntity<ApiResponse> getTest(@PathVariable(name = "testId") Long testId) {
         ApiResponse apiResponse = testService.getTest(testId);
         return apiResponse != null
-                ? ResponseEntity.status(HttpStatus.CREATED).body(apiResponse)
+                ? ResponseEntity.status(HttpStatus.OK).body(apiResponse)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
