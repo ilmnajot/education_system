@@ -33,7 +33,8 @@ public class TestServiceImpl implements TestService {
     private final AnswerAttemptRepository answerAttemptRepository;
 
 
-    public TestServiceImpl(TestRepository testRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, UserRepository userRepository, TestAttemptRepository testAttemptRepository, AnswerAttemptRepository answerAttemptRepository) {
+    public TestServiceImpl(TestRepository testRepository, QuestionRepository questionRepository, AnswerRepository answerRepository,
+                           UserRepository userRepository, TestAttemptRepository testAttemptRepository, AnswerAttemptRepository answerAttemptRepository) {
         this.testRepository = testRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;

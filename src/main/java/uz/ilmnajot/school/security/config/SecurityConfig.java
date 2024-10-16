@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uz.ilmnajot.school.security.jwt.JwtFilter;
 
 @Configuration
@@ -46,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
-                                "/swagg^er-resources/**",
+                                "/swagger-resources/**",
                                 "/configuration/ui/**",
                                 "configuration/security/**",
                                 "/swagger-ui/**",
@@ -58,22 +59,24 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.formLogin(
+                login -> login
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/users")
+                .permitAll()
+        )
+                .logout(
+                        logout ->logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("logout"))
+                        .permitAll()
+                );
         return http.build();
     }
 
 }
 
-//                .formLogin(login -> {
-//                    login.loginPage("/api/auth/login");
-//                    login.defaultSuccessUrl("/");
-//                    login.failureUrl("/login-error");
-//                })
-//                .logout(logout -> {
-//                    logout.logoutRequestMatcher(new AntPathRequestMatcher("logout"));
-//                    logout.logoutSuccessUrl("/");
-//                    logout.deleteCookies("JSESSIONID");
-//                    logout.invalidateHttpSession(true);
-//                });
+
 
 
 
